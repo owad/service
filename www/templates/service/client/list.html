@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+{% block content %}
+    {% block content-header %}
+    <h2>Klienci</h2>
+    {% endblock %}
+    <table class="client-list">
+    {% if client_list %}
+        <tr>
+            <th class="left">ID</th>
+            <th class="left">Imię</th>
+            <th class="left">Nazwisko</th>
+            <th class="left">Firma</th>
+            <th class="left">Adres</th>
+            <th class="left">E-mail</th>
+            <th></th>
+        </tr>
+        {% for client in client_list %}
+        <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url client-details client.id %}'">
+            <td>{{ client.id }}</td>
+            <td>{{ client.first_name }}</td>
+            <td>{{ client.last_name }}</td>
+            <td>{{ client.company_name|default:"-" }}</td>
+            <td>{{ client.get_address_lines }}</td>
+            <td>{{ client.email|default:"-" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Brak zgłoszeń</td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+    </table>
+    
+    {% if page_obj %}
+    <div class="pagination">
+        <span class="step-links">
+        
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">poprzednia</a>
+            {% endif %}
+    
+            <span class="current">
+                strona {{ page_obj.number }} z {{ paginator.num_pages }}
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">następna</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+{% endblock %}

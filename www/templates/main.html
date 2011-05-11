@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>{% block title %}Serwis{% endblock %}</title>
+        <link href="{{ MEDIA_URL }}style/main.css" rel="stylesheet" type="text/css" media="screen" /> 
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
+        $ = JQuery
+        </script>
+    </head>
+    <body>
+        <div class="site">
+            <h2>LECH-KOM Lubaczów - Serwis</h2>
+            {% block top-row %}
+            <div class="top-row">
+                {% if user.is_authenticated %}
+                <div class="account-info">
+                    <div>
+                        <span>użytkownik: {{ user.get_full_name }}</span>
+                        {% if user.is_staff %}
+                        <a href="{% url reports %}">RAPORTY</a>
+                        <a target="_blank" href="/admin/">ADMIN</a>
+                        {% endif %}
+                        <a href="{% url logout %}">WYLOGUJ</a>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="top-menu">
+                    <a href="{% url product-list %}">ZGŁOSZENIA</a>
+                    <a href="{% url client-list %}">KLIENCI</a>
+                    <a href="{% url client-add %}">NOWY KLIENT</a>
+                </div>
+            </div>
+            {%  endblock %}
+            {% block search-forms %}
+            <div class="search-forms">
+                <div class="product-search">
+                    <form action="{% url product-list %}" method="GET">
+                        <label>szukaj złoszenia:</label>
+                        <input type="text" name="q" value="" />
+                        <input type="submit" value="szukaj" />
+                    </form>
+                </div>
+                <div class="client-search">
+                    <form action="{% url client-list %}" method="GET">
+                        <label>szukaj klienta:</label>
+                        <input type="text" name="q" value="" />
+                        <input type="submit" value="szukaj" />
+                    </form>
+                </div>
+                <div class="clearBoth"></div>
+            </div>
+            {%  endblock %}
+            <div class="content">
+            {% block content %}
+            {% block content-header %}
+            
+            {% endblock %}
+            <form action="" method="POST">{% csrf_token %}
+                <table>
+                    <tr>
+                        <td>{{ auth_form.username.label }}</td>
+                        <td>{{ auth_form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ auth_form.password.label }}</td>
+                        <td>{{ auth_form.password }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="zaloguj" /></td>
+                    </tr>
+                </table>
+            </form>
+            {% endblock %}
+            </div>
+            <div id="o_django" class="footer">&copy;&nbsp;Ha haha!</div>
+        </div>
+    </body>
+</html>
