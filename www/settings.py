@@ -103,6 +103,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'www.urls'
 
 TEMPLATE_DIRS = (
+    '/home/owad/workspace/service/www/templates',
     '/home/owad/workspace/django/company/www/templates',
     '/home/owad/workspace/lule.pl/django/company/www/templates'
 )
