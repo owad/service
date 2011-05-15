@@ -57,7 +57,7 @@ class ProductListView(ListView):
     context_object_name = "product_list"
     queryset = None
     template_name = "service/product/list.html"
-    paginate_by = 30
+    paginate_by = 50
     
     
     def get_queryset(self):
@@ -99,7 +99,7 @@ class ClientListView(ListView):
     context_object_name = "client_list"
     queryset = None
     template_name = "service/client/list.html"
-    paginate_by = 30
+    paginate_by = 50
     
     def get_queryset(self):
         q = self.get_search_query()

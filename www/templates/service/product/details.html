@@ -21,6 +21,10 @@
                 <td>{{ product.serial|default:"-" }}</td>
             </tr>
             <tr>
+                <th>Gwarancja</th>
+                <td>{{ product.get_warranty_name }}</td>
+            </tr>
+            <tr>
                 <th>Status: </th>
                 <td>{{ product.get_status_name }}</td>
             </tr>

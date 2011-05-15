@@ -39,9 +39,12 @@ class ReportForm(forms.Form):
     userModel = User()
     startdate = datetime.date(day=1, month=datetime.date.today().month, year=datetime.date.today().year)
     enddate = datetime.date.today()
-    start_date = forms.DateField(widget=SelectDateWidget(), initial=startdate, label='data początkowa')
-    end_date = forms.DateField(widget=SelectDateWidget(), initial=enddate, label='data końcowa')
+
+    this_year = datetime.date.today().year
+    years = range(2007, this_year + 1)
+
+    start_date = forms.DateField(widget=SelectDateWidget(years=years), initial=startdate, label='data początkowa')
+    end_date = forms.DateField(widget=SelectDateWidget(years=years), initial=enddate, label='data końcowa')
     warranty = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=Product.WARRANTY_CHOICES, label='gwarancja')
-    #cost = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=(('hardware', 'sprzęt'), ('software', 'usługi'), ('transport', 'dojazdy')), label='koszt')
     user = forms.MultipleChoiceField(widget=SelectMultiple(), choices=userModel.get_user_choices(), label='pracownik')
     
