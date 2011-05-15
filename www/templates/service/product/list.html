@@ -4,38 +4,56 @@
     {% block content-header %}
     <h2 class="clearBoth">Zgłoszenia</h2>
     {% endblock %}
-    <table class="product-list">
-        <tr>
-            <th class="left">ID</th>
-            <th class="left">Nazwa</th>
-            <th class="left">Producent</th>
-            <th class="left">Serial</th>
-            <th>Gwarancja</th>
-            <th>Do zapłaty</th>
-            <th>Status</th>
-            <th class="left">Numer przesyłki</th>
-            <th>Data przyjęcia</th>
-            <th></th>
-        </tr>
-        {% for product in product_list %}
-        <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url product-details product.id %}'">
-            <td>{{ product.id }}</td>
-            <td>{{ product.name|default:"-" }}</td>
-            <td>{{ product.company|default:"-" }}</td>
-            <td>{{ product.serial|default:"-" }}</td>
-            <td class="center">{{ product.get_warranty_name }}</td>
-            <td class="center">{{ product.get_cost|pln }}</td>
-            <td class="center">{{ product.get_status_name }}</td>
-            <td>{{ product.parcel_number|default:"-" }}</td>
-            <td class="center">{{ product.created }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <th colspan="9" class="center"><h3>Brak zgłoszeń</h3></th>
-        </tr>
-        {% endfor %}
-    </table>
     
+    <div class="product-types">
+        <h3>Według statusu</h3>
+        <ul>
+            <li>Wszystkie ({{ counts.wszystkie }})</li>
+            <li>Przyjęte ({{ counts.przyjety }})</li>
+            <li>W realizacji ({{ counts.w_realizacji }})</li>
+            <li>Serwis zewnętrzny ({{ counts.serwis_zew }})
+                <ul>
+                    <li>Oczekujące ({{ counts.oczekiwanie_na_kuriera }})</li>
+                    <li>Wysłane ({{ counts.wyslano_do_serwisu_zew }})</li>
+                </ul>
+            </li>
+            <li>Do wydania ({{ counts.do_wydania }})</li>
+            <li>Wydane ({{ counts.wydany }})</li>
+        </ul>
+    </div>
+    <div class="product-list-table">
+        <table class="product-list">
+            <tr>
+                <th class="left">ID</th>
+                <th class="left">Nazwa</th>
+                <th class="left">Producent</th>
+                <th class="left">Serial</th>
+                <th>Gwarancja</th>
+                <th>Do zapłaty</th>
+                <th>Status</th>
+                <th class="left">Numer przesyłki</th>
+                <th style="width: 170px;">Data przyjęcia</th>
+                <th></th>
+            </tr>
+            {% for product in product_list %}
+            <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url product-details product.id %}'">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name|default:"-" }}</td>
+                <td>{{ product.company|default:"-" }}</td>
+                <td>{{ product.serial|default:"-" }}</td>
+                <td class="center">{{ product.get_warranty_name }}</td>
+                <td class="center">{{ product.get_cost|pln }}</td>
+                <td class="center">{{ product.get_status_name }}</td>
+                <td>{{ product.parcel_number|default:"-" }}</td>
+                <td class="center">{{ product.created }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <th colspan="9" class="center"><h3>Brak zgłoszeń</h3></th>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
     
     {% if page_obj %}
     <div class="pagination">

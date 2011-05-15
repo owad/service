@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from www.service.forms import CommentForm, ProductForm, ClientForm, ReportForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 import datetime
 from django.db.models import Sum
 from django import template
@@ -60,6 +60,21 @@ class ProductListView(ListView):
     template_name = "service/product/list.html"
     paginate_by = 50
     
+    def get_context_data(self, **kwargs):
+        context = super(ProductListView, self).get_context_data(**kwargs)
+        count_result = Product.objects.values('status').annotate(count=Count('status'))
+        tpl_status_counts = {}
+        external = 0
+        all = 0
+        for row in count_result:
+            tpl_status_counts[row['status']] = row['count']
+            if row['status'] in (Product.EXTERNAL, Product.COURIER): 
+                external = external + int(row['count'])
+            all = all + int(row['count'])
+        tpl_status_counts['wszystkie'] = all
+        tpl_status_counts['serwis_zew'] = external
+        context['counts'] = tpl_status_counts
+        return context
     
     def get_queryset(self):
         q = self.get_search_query()
