@@ -2,26 +2,19 @@
 {% load service_extras %}
 {% block content %}
     {% block content-header %}
-    <h2 class="clearBoth">Zgłoszenia</h2>
+    <h2 class="clearBoth">
+        Zgłoszenia
+        <span class="product-types">
+            <a href="{% url product-list %}">Wszystkie ({{ counts.wszystkie }})</a> / 
+            <a href="{% url product-list-by-status 'przyjety' %}">Przyjęte ({{ counts.przyjety }})</a> / 
+            <a href="{% url product-list-by-status 'w_realizacji' %}">W realizacji ({{ counts.w_realizacji }})</a> /
+            <a href="{% url product-list-by-status 'oczekiwanie_na_kuriera' %}">Oczekujące ({{ counts.oczekiwanie_na_kuriera }})</a> / 
+            <a href="{% url product-list-by-status 'wyslano_do_serwisu_zew' %}">Wysłane ({{ counts.wyslano_do_serwisu_zew }})</a> / 
+            <a href="{% url product-list-by-status 'do_wydania' %}">Do wydania ({{ counts.do_wydania }})</a> / 
+            <a href="{% url product-list-by-status 'wydany' %}">Wydane ({{ counts.wydany }})</a> / 
+        </span>
+    </h2>
     {% endblock %}
-    
-    <div class="product-types">
-        <h3>Według statusu</h3>
-        <ul>
-            <li><a href="{% url product-list %}">Wszystkie ({{ counts.wszystkie }})</a></li>
-            <li><a href="{% url product-list-by-status 'przyjety' %}">Przyjęte ({{ counts.przyjety }})</a></li>
-            <li><a href="{% url product-list-by-status 'w_realizacji' %}">W realizacji ({{ counts.w_realizacji }})</a></li>
-            <li>Serwis zewnętrzny ({{ counts.serwis_zew }})
-                <ul>
-                    <li><a href="{% url product-list-by-status 'oczekiwanie_na_kuriera' %}">Oczekujące ({{ counts.oczekiwanie_na_kuriera }})</a></li>
-                    <li><a href="{% url product-list-by-status 'wyslano_do_serwisu_zew' %}">Wysłane ({{ counts.wyslano_do_serwisu_zew }})</a></li>
-                </ul>
-            </li>
-            <li><a href="{% url product-list-by-status 'do_wydania' %}">Do wydania ({{ counts.do_wydania }})</a></li>
-            <li><a href="{% url product-list-by-status 'wydany' %}">Wydane ({{ counts.wydany }})</a></li>
-        </ul>
-    </div>
-    <div class="product-list-table">
         <table class="product-list">
             <tr>
                 <th class="left">ID</th>
@@ -71,5 +64,5 @@
             </span>
         </div>
         {% endif %}
-    </div>
+    <div class="clear: both;"></div>
 {% endblock %}
