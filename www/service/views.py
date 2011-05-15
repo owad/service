@@ -85,7 +85,9 @@ class ProductListView(ListView):
                                           Q(serial__icontains=q)|
                                           Q(parcel_number__icontains=q))
         else:
-            return Product.objects.all()
+            if 'status' in self.kwargs and self.kwargs['status'] in Product.STATUSES:
+                return Product.objects.all().filter(status__exact=self.kwargs['status'])
+            else: return Product.objects.all()
     
     def get_search_query(self):
         q = None

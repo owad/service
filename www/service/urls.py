@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = patterns('www.service.views',
     url(r'^$', login_required(ProductListView.as_view()), name='product-list'),
     url(r'^zgloszenia/$', login_required(ProductListView.as_view()), name='product-list'),
+    url(r'^zgloszenia/(?P<status>\w+)/$', login_required(ProductListView.as_view()), name='product-list-by-status'),
     url(r'^zgloszenie/(?P<product_id>\d+)/$', login_required(ProductDetailView.as_view()), name='product-details'),
     url(r'^klienci/$', login_required(ClientListView.as_view()), name='client-list'),
     url(r'^klienci/nowy/$', login_required(ClientAddView.as_view()), name='client-add'),

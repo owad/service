@@ -40,6 +40,7 @@ class Product(models.Model):
     DECIMAL_ZERO = '0.00'
     NEW, PROCESSING, COURIER = ('przyjety', 'w_realizacji', 'oczekiwanie_na_kuriera')
     EXTERNAL, READY, CLOSED = ('wyslano_do_serwisu_zew', 'do_wydania', 'wydany')
+    STATUSES = (NEW, PROCESSING, COURIER, EXTERNAL, READY, CLOSED)
     
     NEW_PLURAL, PROCESSING_PLURAL, COURIER_PLURAL = ('przyjęty', 'w realizacji', 'oczekiwanie na kuriera')
     EXTERNAL_PLURAL, READY_PLURAL, CLOSED_PLURAL = ('wysłano do serwisu zewnętrznego', 'do wydania', 'wydany')
