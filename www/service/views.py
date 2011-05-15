@@ -31,7 +31,6 @@ class ProductDetailView(DetailView):
             comment_form.save()
             return HttpResponseRedirect(reverse('product-details', kwargs={'product_id': self.kwargs['product_id']}))
         if 'status_change' in request.POST:
-            print product.status
             if product.status == Product.PROCESSING and 'set_courier' not in request.POST: product.status = Product.READY
             else: product.status = product.get_next_status()
             if 'parcel_number' in request.POST: product.parcel_number = request.POST['parcel_number']
