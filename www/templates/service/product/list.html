@@ -11,7 +11,7 @@
             <a href="{% url product-list-by-status 'oczekiwanie_na_kuriera' %}">Oczekujące ({{ counts.oczekiwanie_na_kuriera }})</a> / 
             <a href="{% url product-list-by-status 'wyslano_do_serwisu_zew' %}">Wysłane ({{ counts.wyslano_do_serwisu_zew }})</a> / 
             <a href="{% url product-list-by-status 'do_wydania' %}">Do wydania ({{ counts.do_wydania }})</a> / 
-            <a href="{% url product-list-by-status 'wydany' %}">Wydane ({{ counts.wydany }})</a> / 
+            <a href="{% url product-list-by-status 'wydany' %}">Wydane ({{ counts.wydany }})</a>
         </span>
     </h2>
     {% endblock %}
