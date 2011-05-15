@@ -86,7 +86,7 @@ def move_comments(row):
 	created = row[20]
 	for note in comments:
 		comment = models.Comment.objects.create(note=note, type=type, user_id=user_id, product_id=product_id, created=created)
-	comment = models.Comment.objects.create(note='Koszy całkowity', type=type, user_id=user_id, product_id=product_id,  hardware=hardware ,software=software , transport=transport, created=created)
+	comment = models.Comment.objects.create(note='Koszt całkowity', type=type, user_id=user_id, product_id=product_id,  hardware=hardware ,software=software , transport=transport, created=created)
 	if created: comment.created = created
 	comment.save()
 
