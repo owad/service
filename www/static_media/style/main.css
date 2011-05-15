@@ -100,4 +100,4 @@ div.footer { display: block; padding: 0px 5px; text-align: right; clear: both; }
 div.search-forms { display: block; clear: both; padding: 10px 10px; background-color: #ddf; }
 div.client-search, div.product-search { float: left; margin-right: 100px; }
 
-span.product-types { font-size: 14px; font-weight: normal; }
+span.product-types { font-size: 13px; font-weight: normal; }
