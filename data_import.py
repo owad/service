@@ -84,7 +84,7 @@ def move_comments(row):
 	created = row[20]
 	for note in comments:
 		comment = models.Comment.objects.create(note=note, type=type, user_id=user_id, product_id=product_id, created=created)
-	comment = models.Comment.objects.create(note='koszt', type=type, user_id=user_id, product_id=product_id,  hardware=hardware ,software=software , transport=transport, created=created)
+	comment = models.Comment.objects.create(note='Koszy całkowity', type=type, user_id=user_id, product_id=product_id,  hardware=hardware ,software=software , transport=transport, created=created)
 	if created: comment.created = created
 	comment.save()
 
@@ -92,11 +92,11 @@ def process():
 	sure = raw_input("Pewny? [y/n]")
 	if (sure == 'y'):	
 		models.Product.objects.all().delete()
-#		models.Client.objects.all().delete()
+		models.Client.objects.all().delete()
 		models.Comment.objects.all().delete()
 	
-#		for row in get_clients():
-#			move_client(row)
+		for row in get_clients():
+			move_client(row)
 		for row in get_products():
 			move_product(row)
 process()
