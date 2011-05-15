@@ -101,5 +101,5 @@ div.search-forms { display: block; clear: both; padding: 10px 10px; background-c
 div.client-search, div.product-search { float: left; margin-right: 100px; }
 
 div.product-types { width: 20%; float: left; }
-div.product-list-table { width: 80%; }
-div.product-types ul { padding-left: 20px; float: right; }
+div.product-list-table { width: 80%; float: right; }
+div.product-types ul { padding-left: 20px; }
