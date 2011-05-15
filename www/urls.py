@@ -14,9 +14,14 @@ urlpatterns = patterns('',
 )
 urlpatterns += staticfiles_urlpatterns()
 
+#if settings.DEBUG:
+#    urlpatterns += patterns('django.views.static',
+#    (r'^static_media/(?P<path>.*)$', 
+#        'serve', {
+#        'document_root': '/srv/www/demo/www/static_media',
+#        'show_indexes': True }),)
+
 if settings.DEBUG:
-    urlpatterns += patterns('django.views.static',
-    (r'^static_media/(?P<path>.*)$', 
-        'serve', {
-        'document_root': '/srv/www/demo/www/static_media',
-        'show_indexes': True }),)
+    urlpatterns += patterns('',
+        (r'^static__media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
