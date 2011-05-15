@@ -122,7 +122,7 @@ class Product(models.Model):
         return self.name
 
 class Comment(models.Model):
-    COMMENT, STATUS_CHANGE = ('komenatrz', 'zmiana_statusu')
+    COMMENT, STATUS_CHANGE = ('komentarz', 'zmiana_statusu')
     COMMENT_PLURAL, STATUS_CHANGE_PLURAL = ('komenatrz', 'zmiana statusu')
     TYPES = (
         (COMMENT, COMMENT_PLURAL),
