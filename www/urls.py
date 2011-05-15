@@ -9,8 +9,8 @@ urlpatterns = patterns('',
     url(r'^zaloguj/$', login, {'template_name': 'registration/login.html'}, name='login'),
     url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='logout'),
     (r'^admin/', include(admin.site.urls)),
-    url(r'^profil/', include('account.urls')),
-    url(r'^', include('service.urls')),
+    url(r'^profil/', include('www.account.urls')),
+    url(r'^', include('www.service.urls')),
 )
 urlpatterns += staticfiles_urlpatterns()
 
@@ -18,5 +18,5 @@ if settings.DEBUG:
     urlpatterns += patterns('django.views.static',
     (r'^static_media/(?P<path>.*)$', 
         'serve', {
-        'document_root': '/home/owad/workspace/django/company/www/static_media',
+        'document_root': '/srv/www/demo/www/static_media',
         'show_indexes': True }),)
