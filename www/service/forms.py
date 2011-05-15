@@ -28,7 +28,7 @@ class CommentForm(ModelForm):
         widgets = {
             'product': HiddenInput(),
             'user': HiddenInput(),
-            'type': HiddenInput()
+            'type': HiddenInput(attrs={'value': Comment.COMMENT})
         }
 
 class ClientForm(ModelForm):

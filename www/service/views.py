@@ -26,6 +26,7 @@ class ProductDetailView(DetailView):
     def post(self, request, **kwargs):
         product = self.get_object()
         comment_form = CommentForm(request.POST)
+        self._form = comment_form
         if comment_form.is_valid():
             comment_form.save()
             return HttpResponseRedirect(reverse('product-details', kwargs={'product_id': self.kwargs['product_id']}))
