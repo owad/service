@@ -85,6 +85,7 @@ div.client-details {
     font-size: 15px; 
     margin: 5px 0px;
 }
+div.comment-add form table { width: 700px; }
 div.comment-add th { text-align: right; padding-right: 5px; width: 120px; vertical-align: top; padding-top: 5px; } 
 div.client-add, div.product-add { width: 580px; }
 div.product-add input { width: 150px; }
