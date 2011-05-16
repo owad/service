@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="site" id="site">
-            <h2>LECH-KOM Lubaczów - Serwis</h2>
+            <h2><span id="main-logo"><span id="logo-l">L</span>ECH-K<span id="logo-o">O</span>M</span> Lubaczów - Serwis</h2>
             {% block top-row %}
             <div class="top-row">
                 {% if user.is_authenticated %}
@@ -103,14 +103,15 @@
         if (property) {
             var d = 0;
             var add = 1;
+            var size = 16;
             if (go) {
                 inter = setInterval(function () {
                         div.style[property] = 'rotate(' + (d % 360) + 'deg)';
                         d = d + add;
-                        if (add < 10) {
+                        if (add < 5) {
                             add = add + 1;
                         }
-                    }, 10
+                    }, 20
                 );
             } else {
                 clearInterval(inter);
@@ -119,13 +120,14 @@
         }
     }
     var go = false;
-    $('#lechkom').click(function() {
+    var id = 'logo-o';
+    $('#' + id).click(function() {
         if (go) {
             go = false;
         } else {
             go = true;
         }
-        rotate('lechkom');
+        rotate(id);
     })
     </script>
     </body>
