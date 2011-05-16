@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="site" id="site">
-            <h2><span id="main-logo"><span id="logo-l">L</span>ECH-K<span id="logo-o">O</span>M</span> Lubaczów - Serwis</h2>
+            <h2><span id="main-logo"><span id="logo-l">L</span>ECH<span id="dash">-</span>K<span id="logo-o">O</span>M</span> Lubaczów - Serwis</h2>
             {% block top-row %}
             <div class="top-row">
                 {% if user.is_authenticated %}
@@ -120,7 +120,7 @@
         }
     }
     var go = false;
-    var id = 'logo-o';
+    var id = 'dash';
     $('#' + id).click(function() {
         if (go) {
             go = false;
