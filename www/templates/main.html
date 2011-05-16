@@ -10,7 +10,7 @@
         </script>
     </head>
     <body>
-        <div class="site">
+        <div class="site" id="site">
             <h2>LECH-KOM Lubaczów - Serwis</h2>
             {% block top-row %}
             <div class="top-row">
@@ -75,7 +75,58 @@
             </form>
             {% endblock %}
             </div>
-            <div id="o_django" class="footer">&copy;&nbsp;Ha haha!</div>
+            <div class="footer">
+                <div class="author" id="author" style="float: right; width: 200px;">&copy;&nbsp;<span id="lechkom">LECH-KOM</span> Lubaczów</div>
+                <div class="clearBoth"></div>
+            </div>
         </div>
+    <script type="text/javascript">
+    function getTransformProperty(element) {
+        var properties = [
+            'transform',
+            'WebkitTransform',
+            'MozTransform',
+            'msTransform',
+            'OTransform'
+        ];
+        var p;
+        while (p = properties.shift()) {
+            if (typeof element.style[p] != 'undefined') {
+                return p;
+            }
+        }
+        return false;
+    }
+    function rotate(id) {
+        var div = document.getElementById(id);
+        var property = getTransformProperty(div);
+        if (property) {
+            var d = 0;
+            var add = 1;
+            if (go) {
+                inter = setInterval(function () {
+                        div.style[property] = 'rotate(' + (d % 360) + 'deg)';
+                        d = d + add;
+                        if (add < 10) {
+                            add = add + 1;
+                        }
+                    }, 10
+                );
+            } else {
+                clearInterval(inter);
+                div.style[property] = 'rotate(0deg)';
+            }
+        }
+    }
+    var go = false;
+    $('#lechkom').click(function() {
+        if (go) {
+            go = false;
+        } else {
+            go = true;
+        }
+        rotate('lechkom');
+    })
+    </script>
     </body>
 </html>
