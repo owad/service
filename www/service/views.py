@@ -30,7 +30,6 @@ class ProductDetailView(DetailView):
         self._form = comment_form
         if comment_form.is_valid():
             new_comment = comment_form.save()
-            print request.POST
             if request.user.is_staff and 'hardware_add' in request.POST:
                 new_comment.type = Comment.HARDWARE_ADD
                 new_comment.save()
