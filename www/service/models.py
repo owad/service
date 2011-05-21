@@ -66,6 +66,7 @@ class Product(models.Model):
     name = models.CharField(max_length=128, verbose_name='nazwa')
     producent = models.CharField(max_length=128, blank=True, verbose_name='producent')
     serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
+    invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(blank=True, verbose_name='opis usterki')
     status = models.CharField(choices=STATUS_CHOICES, max_length=32)
     parcel_number = models.CharField(max_length=64, blank=True, verbose_name='numer przesyłki')
@@ -123,11 +124,12 @@ class Product(models.Model):
         return self.name
 
 class Comment(models.Model):
-    COMMENT, STATUS_CHANGE = ('komentarz', 'zmiana_statusu')
-    COMMENT_PLURAL, STATUS_CHANGE_PLURAL = ('komenatrz', 'zmiana statusu')
+    COMMENT, STATUS_CHANGE, HARDWARE_ADD = ('komentarz', 'zmiana_statusu', 'sprzet')
+    COMMENT_PLURAL, STATUS_CHANGE_PLURAL, HARDWARE_ADD_PLURAL = ('komenatrz', 'zmiana statusu', 'sprzęt')
     TYPES = (
         (COMMENT, COMMENT_PLURAL),
-        (STATUS_CHANGE, STATUS_CHANGE_PLURAL)
+        (STATUS_CHANGE, STATUS_CHANGE_PLURAL),
+        (HARDWARE_ADD, HARDWARE_ADD_PLURAL)
     )
     
     DECIMAL_ZERO = '0.00'

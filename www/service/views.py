@@ -12,9 +12,10 @@ from django.db.models import Sum
 from django import template
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
+from django.contrib import messages
 import ho.pisa as pisa
 import cStringIO as StringIO
-import cgi
+
 
 register = template.Library()
 
@@ -28,16 +29,27 @@ class ProductDetailView(DetailView):
         comment_form = CommentForm(request.POST)
         self._form = comment_form
         if comment_form.is_valid():
-            comment_form.save()
+            new_comment = comment_form.save()
+            print request.POST
+            if request.user.is_staff and 'hardware_add' in request.POST:
+                new_comment.type = Comment.HARDWARE_ADD
+                new_comment.save()
             return HttpResponseRedirect(reverse('product-details', kwargs={'product_id': self.kwargs['product_id']}))
         if 'status_change' in request.POST:
             if product.status == Product.PROCESSING and 'set_courier' not in request.POST: product.status = Product.READY
             else: product.status = product.get_next_status()
             if 'parcel_number' in request.POST: product.parcel_number = request.POST['parcel_number']
-            product.save()
-            status_change_note = 'Status zmieniony na "%s"' % (product.get_status_name(),)
-            comment = Comment(note=status_change_note, type=Comment.STATUS_CHANGE, user_id=self.request.user.id, product=product)
-            comment.save()
+            if request.user.is_staff == False and product.status == Product.CLOSED and request.POST['invoice'].strip() != '':
+                product.invoice = request.POST['invoice'].strip()
+                save = True
+            else:
+                save = False
+                messages.add_message(request, messages.ERROR, 'podaj numer faktury')
+            if request.user.is_staff or save: 
+                product.save()
+                status_change_note = 'Status zmieniony na "%s"' % (product.get_status_name(),)
+                comment = Comment(note=status_change_note, type=Comment.STATUS_CHANGE, user_id=self.request.user.id, product=product)
+                comment.save()
             return HttpResponseRedirect(reverse('product-details', kwargs={'product_id': self.kwargs['product_id']}))
         return self.get(request)
     
@@ -151,6 +163,28 @@ class ClientAddView(TemplateView):
             saved_instance = self._form.save()
             return HttpResponseRedirect(reverse('client-details', kwargs={'client_id': saved_instance.id}))
         return self.get(request)
+    
+class ClientEditView(TemplateView):
+    template_name = "service/client/edit.html"
+    _form = None
+    def get_context_data(self, **kwargs):
+        context = super(ClientEditView, self).get_context_data(**kwargs)
+        client = get_object_or_404(Client, pk=self.kwargs['client_id'])
+        self._form = ClientForm(data=client.__dict__)
+        context['client'] = client
+        context['client_form'] = self._form
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self._form = ClientForm(request.POST)
+        if self._form.is_valid():
+            client = get_object_or_404(Client, pk=self.kwargs['client_id'])
+            for field in ('first_name', 'last_name', 'company_name', 'address_line1', 'address_line2', 'city', 'postcode', 'email', 'phone_number'):
+                client.__dict__[field] = request.POST[field]
+            client.save()
+            return HttpResponseRedirect(reverse('client-details', kwargs={'client_id': client.id}))
+        return self.get(request)
+        
 class ClientDetailView(ProductListView):
     template_name = "service/client/details.html"
     

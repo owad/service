@@ -41,6 +41,11 @@
                             <label for="id_parcel_number">Numer przesyłki: </label><input size="12" maxlength="64" id="id_parcel_number" type="text" name="parcel_number" />
                         </div>
                         {% endif %}
+                        {% if product.status == product.READY and not user.is_staff%}
+                        <div>
+                            <label for="id_invoice">Numer faktury/paragonu: </label><input size="12" maxlength="128" id="id_invoice" type="text" name="invoice" />
+                        </div>
+                        {% endif %}
                         <input type="submit" name="status_change" value="aktualizuj status" />
                     </form>
                 </td>
@@ -55,6 +60,9 @@
         <div>{{ client.company_name }}</div>
         <div></div>
         <div>{{ client.email }}</div>
+        <div class="product-add-link">
+            <a href="{% url client-edit client.id %}">edycja danych klienta</a>
+        </div>
     </div>
     <div class="clearBoth"></div>
     {% if comment_list %}
@@ -89,7 +97,13 @@
             {{ comment_form.as_table }}
             <tr>
                 <th></th>
-                <td><input type="submit" value="dodaj" /></td>
+                <td>
+                    {% if user.is_staff %}
+                    <label for="id_hardware_add">sprzęt</label>
+                    <input type="checkbox" name="hardware_add" id="id_hardware_add"/>
+                    {% endif %}
+                    <input type="submit" value="dodaj komentarz" />
+                </td>
             </tr>
             </table>
         </form>

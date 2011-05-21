@@ -13,6 +13,7 @@
     
     <div class="product-add-link">
         <a href="{% url product-add client.id %}">nowe zgłoszenie</a>
+        <a href="{% url client-edit client.id %}">edycja danych klienta</a>
     </div>
 </div>
 {{ block.super }}

@@ -18,6 +18,7 @@
         <table class="product-list">
             <tr>
                 <th class="left">ID</th>
+                <th class="left">Klient</th>
                 <th class="left">Nazwa</th>
                 <th class="left">Producent</th>
                 <th class="left">Serial</th>
@@ -31,6 +32,7 @@
             {% for product in product_list %}
             <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url product-details product.id %}'">
                 <td>{{ product.id }}</td>
+                <td>{{ product.client }}</td>
                 <td>{{ product.name|default:"-" }}</td>
                 <td>{{ product.company|default:"-" }}</td>
                 <td>{{ product.serial|default:"-" }}</td>

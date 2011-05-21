@@ -22,6 +22,7 @@
             <td>{{ client.company_name|default:"-" }}</td>
             <td>{{ client.get_address_lines }}</td>
             <td>{{ client.email|default:"-" }}</td>
+			<td><a href="{% url client-edit client.id %}">edycja</a></td>
         </tr>
         {% empty %}
         <tr>

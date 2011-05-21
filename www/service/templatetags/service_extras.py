@@ -17,6 +17,5 @@ def comment_costs(obj, arg='zł'):
     if get_data: return "(" + ", ".join(to_join) + ")"
     else: return ''
 
-
 register.filter('pln', pln)
 register.filter('comment_costs', comment_costs)
