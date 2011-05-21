@@ -77,7 +77,7 @@
         </tr>
     {% for comment in comment_list %}
         <tr style="background-color:#{% cycle 'eee' 'fff' %};">
-            <td>{{ comment.note }}</td>
+            <td>{% if comment.type == comment.HARDWARE_ADD %} Wydanie sprzętu: {% endif %}{{ comment.note }}</td>
             <td class="center">{{ comment.hardware|pln }}</td>
             <td class="center">{{ comment.software|pln }}</td>
             <td class="center">{{ comment.transport|pln }}</td>
