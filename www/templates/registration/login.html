@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if form.errors %}
-<p>Błędna nazwa użytkownika lub hasło. Spróbuj ponownie.</p>
+<p class="error">Błędna nazwa użytkownika lub hasło. Spróbuj ponownie.</p>
 {% endif %}
 <div class="login-form">
     <form method="post" action="{% url login %}">{% csrf_token %}

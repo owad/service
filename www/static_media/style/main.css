@@ -105,4 +105,4 @@ span.product-types { font-size: 13px; font-weight: normal; }
 
 div.author { width: 200px; float: right; text-align: center; }
 
-li.error { color: #d00; font-weight: bold; }
+li.error, p.error { color: #d00; font-weight: bold; text-align: center;}
