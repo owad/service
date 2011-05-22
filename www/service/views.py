@@ -38,12 +38,12 @@ class ProductDetailView(DetailView):
             if product.status == Product.PROCESSING and 'set_courier' not in request.POST: product.status = Product.READY
             else: product.status = product.get_next_status()
             if 'parcel_number' in request.POST: product.parcel_number = request.POST['parcel_number']
-            if request.user.is_staff == False and product.status == Product.CLOSED and request.POST['invoice'].strip() != '':
+            save = True
+            if request.user.is_staff == False and product.status == Product.CLOSED:
+                if request.POST['invoice'].strip() != '':
+                    messages.add_message(request, messages.ERROR, 'podaj numer faktury')
+                    save = False
                 product.invoice = request.POST['invoice'].strip()
-                save = True
-            else:
-                save = False
-                messages.add_message(request, messages.ERROR, 'podaj numer faktury')
             if request.user.is_staff or save: 
                 product.save()
                 status_change_note = 'Status zmieniony na "%s"' % (product.get_status_name(),)
