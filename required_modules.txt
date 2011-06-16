@@ -1,0 +1,5 @@
+django
+MySQL-python
+pisa
+reportlab
+html5lib
