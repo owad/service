@@ -5,6 +5,7 @@ from django.forms import ChoiceField, CharField
 from django.forms.widgets import HiddenInput, CheckboxSelectMultiple, SelectMultiple
 from www.service.models import Product, Comment, Client, User
 from django.forms.extras.widgets import SelectDateWidget
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 import datetime
 
 class ProductForm(ModelForm):
@@ -34,6 +35,13 @@ class CommentForm(ModelForm):
 class ClientForm(ModelForm):
     class Meta:
         model = Client
+
+    def clean_phone_number(self):
+        num_len = len(str(self.cleaned_data['phone_number']))
+        if num_len != 9 and num_len != 0:
+            if 'phone_number' not in self._errors:
+                self._errors['phone_number'] = []
+            self._errors['phone_number'].append('Błędny numer telefonu')
 
 class ReportForm(forms.Form):
     userModel = User()
