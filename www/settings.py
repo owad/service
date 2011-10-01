@@ -1,7 +1,9 @@
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 ADMINS = (
     ('Owad', 'llechowicz@gmail.com'),
@@ -12,10 +14,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'company',                      # Or path to database file if using sqlite3.
-        'USER': 'company',                      # Not used with sqlite3.
+        'NAME': 'service',                      # Or path to database file if using sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': 'lule.pl',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'www.urls'
 TEMPLATE_DIRS = (
     '/home/owad/workspace/service/www/templates',
     '/home/owad/workspace/django/company/www/templates',
-    '/home/owad/workspace/lule.pl/django/company/www/templates'
+    SITE_ROOT + '/templates'
 )
 
 INSTALLED_APPS = (
