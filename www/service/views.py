@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import TemplateView, ListView, DetailView, View
+from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import render_to_response, get_object_or_404, render
 from www.service.models import Product, Client, Comment
 from django.contrib.auth.models import User
@@ -15,7 +16,6 @@ from django.template.context import RequestContext
 from django.contrib import messages
 import ho.pisa as pisa
 import cStringIO as StringIO
-
 
 register = template.Library()
 
@@ -105,23 +105,20 @@ class ProductListView(ListView):
             q = self.request.GET['q'].strip()
         return q
     
-class ProductAddView(TemplateView):
+class ProductAddView(CreateView):
     template_name = "service/product/add.html"
-    _form = None
+    queryset = Product.objects.all()
+    form_class = ProductForm
+    success_url = 'product-details'
     
-    def get_context_data(self, **kwargs):
-        context = super(ProductAddView, self).get_context_data(**kwargs)
-        if not self._form: self._form = ProductForm(initial={'client': self.kwargs['client_id'], 'user': self.request.user.id})
-        context['product_form'] = self._form
-        context['client'] = get_object_or_404(Client, pk=self.kwargs['client_id'])
-        return context
+    def get_form_kwargs(self):
+        kwargs = CreateView.get_form_kwargs(self)
+        kwargs['initial']['user'] = self.request.user
+        kwargs['initial']['client'] = get_object_or_404(Client, pk=self.kwargs['client_id'])
+        return kwargs
     
-    def post(self, request, *args, **kwargs):
-        self._form = ProductForm(request.POST)
-        if self._form.is_valid():
-            saved_instance = self._form.save()
-            return HttpResponseRedirect(reverse('product-details', kwargs={'product_id': saved_instance.id}))
-        return self.get(request)
+    def get_success_url(self):
+        return reverse(self.success_url, kwargs={'product_id': self.object.id})
     
 class ClientListView(ListView):
     context_object_name = "client_list"
@@ -148,42 +145,22 @@ class ClientListView(ListView):
             q = self.request.GET['q'].strip()
         return q
     
-class ClientAddView(TemplateView):
+class ClientAddView(CreateView):
     template_name = "service/client/add.html"
-    _form = None
-    def get_context_data(self, **kwargs):
-        context = super(ClientAddView, self).get_context_data(**kwargs)
-        if not self._form: self._form = ClientForm()
-        context['client_form'] = self._form
-        return context
-    def post(self, request, *args, **kwargs):
-        self._form = ClientForm(request.POST)
-        if self._form.is_valid():
-            saved_instance = self._form.save()
-            return HttpResponseRedirect(reverse('client-details', kwargs={'client_id': saved_instance.id}))
-        return self.get(request)
+    queryset = Client.objects.all()
+    form_class = ClientForm
+    success_url = 'client-details'
     
-class ClientEditView(TemplateView):
+    def get_success_url(self):
+        return reverse(self.success_url, kwargs={'client_id': self.object.id})
+    
+class ClientEditView(UpdateView):
     template_name = "service/client/edit.html"
-    _form = None
-    def get_context_data(self, **kwargs):
-        context = super(ClientEditView, self).get_context_data(**kwargs)
-        client = get_object_or_404(Client, pk=self.kwargs['client_id'])
-        self._form = ClientForm(data=client.__dict__)
-        context['client'] = client
-        context['client_form'] = self._form
-        return context
+    form_class = ClientForm
     
-    def post(self, request, *args, **kwargs):
-        self._form = ClientForm(request.POST)
-        if self._form.is_valid():
-            client = get_object_or_404(Client, pk=self.kwargs['client_id'])
-            for field in ('first_name', 'last_name', 'company_name', 'address_line1', 'address_line2', 'city', 'postcode', 'email', 'phone_number'):
-                client.__dict__[field] = request.POST[field]
-            client.save()
-            return HttpResponseRedirect(reverse('client-details', kwargs={'client_id': client.id}))
-        return self.get(request)
-        
+    def get_success_url(self):
+        return reverse('client-details', kwargs={'client_id': client.id})
+    
 class ClientDetailView(ProductListView):
     template_name = "service/client/details.html"
     

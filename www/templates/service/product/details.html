@@ -32,7 +32,7 @@
             <tr>
                 <th></th>
                 <td>
-                    <form action="" method="POST">{% csrf_token %}
+                    <form action="" method="POST" id="status_update">{% csrf_token %}
                         {% if product.status == product.PROCESSING %}
                         <input type="checkbox" id="id_set_courier" name="set_courier" /><label for="id_set_courier">serwis zew.</label>
                         {% endif %}
@@ -103,6 +103,7 @@
                     <input type="checkbox" name="hardware_add" id="id_hardware_add"/>
                     {% endif %}
                     <input type="submit" value="dodaj komentarz" />
+                    <button type="button" onclick="alert('dupa')">aktualizuj status</button>
                 </td>
             </tr>
             </table>

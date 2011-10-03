@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User as AuthUser
 from django.db.models import Sum
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 class User(AuthUser):
     class Meta:
@@ -26,7 +27,8 @@ class Client(models.Model):
     city = models.CharField(max_length=128, verbose_name='miasto')
     postcode = models.CharField(max_length=8, blank=True, verbose_name='kod pocztowy')
     email = models.EmailField(blank=True, verbose_name='e-mail')
-    phone_number = models.CharField(max_length=16, blank=True, verbose_name='telefon')
+    phone_number = models.CharField(null=True, blank=True, max_length=9, verbose_name='telefon', 
+                                    validators=[MaxLengthValidator(9), MinLengthValidator(9)])
     created = models.DateTimeField(auto_now_add=True, verbose_name='data utworzenia')
 
     class Meta:

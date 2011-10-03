@@ -7,7 +7,7 @@
     <div class="product-add">
         <form action="" method="POST">{% csrf_token %}
             <table>
-                {{ product_form.as_table }}
+                {{ form.as_table }}
                 <tr>
                     <th></th>
                     <td><input type="submit" value="dodaj" /></td>
