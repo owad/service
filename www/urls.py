@@ -8,9 +8,12 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^zaloguj/$', login, {'template_name': 'registration/login.html'}, name='login'),
     url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='logout'),
-    (r'^admin/', include(admin.site.urls)),
-    url(r'^profil/', include('www.account.urls')),
-    url(r'^', include('www.service.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^profil/', include('account.urls')),
+    url(r'^person/', include('person.urls')),
+    url(r'^pdf/', include('pdf.urls')),
+    url(r'^report/', include('report.urls')),
+    url(r'^', include('product.urls')),
 )
 urlpatterns += staticfiles_urlpatterns()
 
@@ -21,7 +24,7 @@ urlpatterns += staticfiles_urlpatterns()
 #        'document_root': '/srv/www/demo/www/static_media',
 #        'show_indexes': True }),)
 
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^static__media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    )
+#if settings.DEBUG:
+#    urlpatterns += patterns('',
+#        (r'^static_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+#    )

@@ -4,14 +4,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>{% block title %}Serwis{% endblock %}</title>
-        <link href="{{ MEDIA_URL }}style/main.css" rel="stylesheet" type="text/css" media="screen" /> 
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
-        $ = JQuery
-        </script>
+        <link href="{{ STATIC_URL }}style/main.css" rel="stylesheet" type="text/css" media="screen" />
+        <script type="text/javascript" src="{{ STATIC_URL }}javascript/jquery-1.4.3.min.js"></script>
+        <!-- Fancybox -->
+       	<script type="text/javascript" src="{{ STATIC_URL }}fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+        <link href="{{ STATIC_URL }}fancybox/style.css" rel="stylesheet" type="text/css" media="screen" />
+        <!-- End -->
     </head>
     <body>
         <div class="site" id="site">
-            <h2><span id="main-logo"><span id="logo-l">L</span>ECH<span id="dash">-</span>K<span id="logo-o">O</span>M</span> Lubaczów - Serwis</h2>
+            <h2><span id="main-logo">LECH-KOM Lubaczów - Serwis</span></h2>
             {% block top-row %}
             <div class="top-row">
                 {% if user.is_authenticated %}
@@ -87,55 +91,12 @@
                 <div class="clearBoth"></div>
             </div>
         </div>
-    <script type="text/javascript">
-    function getTransformProperty(element) {
-        var properties = [
-            'transform',
-            'WebkitTransform',
-            'MozTransform',
-            'msTransform',
-            'OTransform'
-        ];
-        var p;
-        while (p = properties.shift()) {
-            if (typeof element.style[p] != 'undefined') {
-                return p;
-            }
-        }
-        return false;
-    }
-    function rotate(id) {
-        var div = document.getElementById(id);
-        var property = getTransformProperty(div);
-        if (property) {
-            var d = 0;
-            var add = 1;
-            var size = 16;
-            if (go) {
-                inter = setInterval(function () {
-                        div.style[property] = 'rotate(' + (d % 360) + 'deg)';
-                        d = d + add;
-                        if (add < 5) {
-                            add = add + 1;
-                        }
-                    }, 20
-                );
-            } else {
-                clearInterval(inter);
-                div.style[property] = 'rotate(0deg)';
-            }
-        }
-    }
-    var go = false;
-    var id = 'dash';
-    $('#' + id).click(function() {
-        if (go) {
-            go = false;
-        } else {
-            go = true;
-        }
-        rotate(id);
-    })
-    </script>
+        <!-- JAVASCRIPT -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#ajax-comment-add").fancybox();
+            });
+        </script>
+        <!-- END -->
     </body>
 </html>

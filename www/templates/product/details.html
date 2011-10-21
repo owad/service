@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+{% load service_extras %}
+{% block title %} {{ block.super }} - {{ product }} {% endblock %}
+{% block content %} 
+{% block content-header %}
+    <h2>Dane zgłoszenia #{{ product.id }}</h2>
+    {% endblock %}
+<div class="product-details">
+    <div class="product-data">
+        <table>
+            <tr><th>Nazwa: </th><td>{{ product.name }}</td></tr>
+            <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
+            <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
+            <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
+            <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
+        </table>
+    </div>
+    <div class="client-data">
+        <table>
+            <tr><td><h3>Dane klienta</h3></td></tr>
+            <tr><td>{{ product.client.first_name }} {{ product.client.last_name }}</td></tr>
+            <tr><td>{{ product.client.company_name }}</td></tr>
+            <tr><td>{{ product.client.email }}</td></tr>
+            <tr><td><div class="product-add-link"><a href="{% url client-edit product.client.id %}">edycja danych klienta</a></div></td></tr>
+        </table>
+    </div>
+    <div class="clearBoth"></div>
+    {% if comment_list %}
+    <h2>Historia</h2>
+    <table class="comment-list">
+        <tr>
+            <th class="left">Notatka</th>
+            <th>Koszt sprzętu</th>
+            <th>Koszt usułgi</th>
+            <th>Koszt dojazdu</th>
+            <th>Data</th>
+        </tr>
+    {% for comment in product.comment_set.all %}
+        <tr style="background-color:#{% cycle 'eee' 'fff' %};">
+            <td>{% if comment.type == comment.HARDWARE_ADD %} Wydanie sprzętu: {% endif %}{{ comment.note }}</td>
+            <td class="center">{{ comment.hardware|pln }}</td>
+            <td class="center">{{ comment.software|pln }}</td>
+            <td class="center">{{ comment.transport|pln }}</td>
+            <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5">brak komentarzy</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+    
+    <div class="return-link">
+        <a href="{% url product-list %}">powrót</a>
+        <a id="ajax-comment-add" href="{% url comment-add product.id %}">komentarz</a>
+        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+    </div>
+    <div class="clearBoth"></div>
+</div>
+{% endblock %}
