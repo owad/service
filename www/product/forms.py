@@ -29,8 +29,8 @@ class CommentForm(ModelForm):
             'user': HiddenInput(),
             'type': HiddenInput(attrs={'value': Comment.COMMENT})
         }
-        exclude = ('hardware',)
-
+        exclude = ('hardware', 'status')
+    
 class StaffCommentForm(ModelForm):
     class Meta:
         model = Comment
@@ -39,7 +39,8 @@ class StaffCommentForm(ModelForm):
             'user': HiddenInput(),
             'type': HiddenInput(attrs={'value': Comment.HARDWARE_ADD})
         }
-        
+        exclude = ('status',)
+    
 class CourierCommentForm(CommentForm):
     class Meta:
         model = Comment
@@ -48,8 +49,8 @@ class CourierCommentForm(CommentForm):
             'user': HiddenInput(),
             'type': HiddenInput(attrs={'value': Comment.COMMENT})
         }
-        exclude = ('hardware',)
-
+        exclude = ('hardware', 'status')
+    
     courier = forms.ChoiceField(label="Kurier", choices=[(obj.id, obj) for obj in Courier.objects.all()])
     parcel_number = forms.CharField(label="Numer przesyłki", max_length=64)
     

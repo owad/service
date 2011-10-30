@@ -4,7 +4,8 @@
     {% block content-header %}
     <h2 class="clearBoth">
         Zgłoszenia
-        <span class="product-types">
+        <span class="product-types"> 
+            <a href="{% url product-list-by-status 'aktualne' %}">Bieżące</a> / 
             <a href="{% url product-list %}">Wszystkie ({{ counts.wszystkie }})</a> / 
             <a href="{% url product-list-by-status 'przyjety' %}">Przyjęte ({{ counts.przyjety }})</a> / 
             <a href="{% url product-list-by-status 'w_realizacji' %}">W realizacji ({{ counts.w_realizacji }})</a> /

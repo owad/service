@@ -33,6 +33,8 @@ class Product(models.Model):
         (CLOSED, CLOSED_NICE)
     )
     
+    IN_PROGRESS = (PROCESSING, COURIER, EXTERNAL, BACK, READY)
+    
     FIRST_STATUS = NEW
     LAST_STATUS = CLOSED
     
@@ -146,12 +148,15 @@ class Comment(models.Model):
     
     note = models.TextField(verbose_name='notatka')
     type = models.CharField(choices=TYPES, max_length=32, verbose_name='typ')
-    user = models.ForeignKey(User, verbose_name='pracownik')
-    product = models.ForeignKey(Product, verbose_name='produkt')
+    status = models.CharField(blank=True, max_length=32)
     hardware = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt sprzętu')
     software = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt usługi')
     transport = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt dojazdu')
     created = models.DateTimeField(auto_now_add=True, verbose_name='data zgłoszenia')
+
+    user = models.ForeignKey(User, verbose_name='pracownik')
+    product = models.ForeignKey(Product, verbose_name='produkt')
+    
 
     class Meta:
         verbose_name_plural = "komentarz"

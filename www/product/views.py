@@ -59,10 +59,13 @@ class ProductListView(ListView):
                                           Q(name__icontains=q)|
                                           Q(producent__icontains=q)|
                                           Q(serial__icontains=q)|
-                                          Q(parcel_number__icontains=q))
+                                          Q(parcel_number__icontains=q)).filter(status__in=Product.IN_PROGRESS)
         else:
-            if 'status' in self.kwargs and self.kwargs['status'] in Product.STATUSES:
-                return Product.objects.all().filter(status__exact=self.kwargs['status'])
+            if 'status' in self.kwargs:
+                if self.kwargs['status'] in Product.STATUSES:
+                    return Product.objects.all().filter(status__exact=self.kwargs['status'])
+                if self.kwargs['status'] == 'aktualne':
+                    return Product.objects.filter(id__in=Comment.objects.filter(user=self.request.user).filter(status__in=Product.IN_PROGRESS))
             else:
                 return Product.objects.all()
     
@@ -125,6 +128,7 @@ class CommentAddView(CreateView):
         save = True
         if 'status_change' in self.request.POST and int(self.request.POST['status_change']) > 0:
             new_status = product.set_next_status(self.request)
+            new_comment.status = new_status
             if new_status == Product.LAST_STATUS and not self.request.user.is_staff:
                 save = False
             if new_status == Product.READY:

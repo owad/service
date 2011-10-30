@@ -1,4 +1,4 @@
-# Django settings for test123 project.
+# Django settings for service project.
 import os
 
 DEBUG = True
@@ -126,8 +126,6 @@ INSTALLED_APPS = (
     'product',
     'report',
     'pdf',
-    'dajaxice',
-    'dajax',
 )
 
 # A sample logging configuration. The only tangible logging

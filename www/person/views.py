@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from person.models import Client, User
 from person.forms import ClientForm
@@ -17,12 +18,9 @@ class ClientListView(ListView):
     def get_queryset(self):
         q = self.get_search_query()
         if q:
-            return Client.objects.filter(Q(id__icontains=q)|
-                                         Q(email__icontains=q)|
-                                         Q(first_name__icontains=q)|
+            return Client.objects.filter(Q(first_name__icontains=q)|
                                          Q(last_name__icontains=q)|
                                          Q(company_name__icontains=q)|
-                                         Q(city__icontains=q)|
                                          Q(phone_number__icontains=q))
         else:
             return Client.objects.all()
