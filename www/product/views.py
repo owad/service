@@ -12,9 +12,6 @@ from product.models import Product, Comment, Courier
 from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm
 from person.models import Client
 
-from dajax.core import Dajax
-from dajaxice.decorators import dajaxice_register
-
 register = template.Library()
 
 class ProductDetailView(CreateView):

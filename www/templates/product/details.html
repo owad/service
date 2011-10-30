@@ -55,11 +55,11 @@
             <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
             <td class="center">
                 {% if user.is_staff %}
-                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a> 
-                {% endif %}
+                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
                 <script type="text/javascript">
                     $("#delete-comment" + {{ comment.id }}).fancybox();
-                </script>
+                </script> 
+                {% endif %}
             </td>
         </tr>
     {% empty %}
