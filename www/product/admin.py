@@ -1,5 +1,5 @@
 from django.contrib import admin
-from product.models import Product, Comment
+from product.models import Product, Comment, Courier
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
@@ -21,5 +21,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_display_links = ('product', 'note')
     actions_on_bottom = True
 
+
+class CourierAdmin(admin.ModelAdmin):
+    model = Courier
+
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Courier, CourierAdmin)

@@ -1,9 +1,20 @@
 # -* - coding: utf-8 -*-
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 from person.models import User, Client
 
+class Courier(models.Model):
+    
+    name = models.CharField(max_length='64')
+    
+    class Meta:
+        verbose_name_plural = "kurierzy"
+        verbose_name = "kurier"
+    
+    def __unicode__(self):
+        return self.name
+    
 class Product(models.Model):
     DECIMAL_ZERO = '0.00'
     NEW, PROCESSING, COURIER = ('przyjety', 'w_realizacji', 'do_wyslania')
@@ -38,15 +49,19 @@ class Product(models.Model):
     description = models.TextField(blank=True, verbose_name='opis usterki')
     status = models.CharField(choices=STATUS_CHOICES, max_length=32)
     parcel_number = models.CharField(max_length=64, blank=True, verbose_name='numer przesyłki')
+    external_service_name = models.CharField(max_length=128, blank=True, verbose_name='nazwa serwisu zewnętrznego')
     max_cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='koszt naprawy do', default=DECIMAL_ZERO)
     warranty = models.CharField(choices=WARRANTY_CHOICES, max_length=16, verbose_name='gwarancja')
-    user = models.ForeignKey(User, verbose_name='pracownik')
-    client = models.ForeignKey(Client, verbose_name='klient')
+    courier = models.IntegerField(null=True, blank=True, choices=[(obj.id, obj) for obj in Courier.objects.all()])
     created = models.DateTimeField(auto_now_add=True, verbose_name='data zgłoszenia')
     updated = models.DateTimeField(auto_now=True, verbose_name='ostatnia akutalizajca')
-
+    
+    user = models.ForeignKey(User, verbose_name='pracownik')
+    client = models.ForeignKey(Client, verbose_name='klient')
+    
     class Meta:
-        verbose_name_plural = "zgłoszenie"
+        verbose_name_plural = "zgłoszenia"
+        verbose_name = "zgłoszenie"
         ordering = ['-created']
         
     def get_next_status(self):
@@ -62,6 +77,26 @@ class Product(models.Model):
                 if key == self.status: break_on_next = True
             return next_status
     
+    def set_next_status(self, request):
+        old_status = self.status 
+        POST = request.POST
+        if 'status_change' in POST and int(POST['status_change']) == 1 and self.status == self.PROCESSING:
+            self.status = Product.READY
+        else: 
+            self.status = self.get_next_status()
+        
+        if old_status != self.status:
+            new_comment = Comment()
+            new_comment.note = 'Zmiana statusu na %s' % (self.get_status_name(),)
+            new_comment.type = Comment.STATUS_CHANGE
+            new_comment.user_id = request.user.id
+            new_comment.product_id = POST['product']
+            new_comment.save()
+        
+        if old_status == self.COURIER:
+            self.parcel_number = POST['parcel_number']
+            self.courier = POST['courier']
+        
     def get_status_name(self):
         for status in self.STATUS_CHOICES:
             if self.status == status[0]: return status[1]
@@ -88,8 +123,22 @@ class Product(models.Model):
         if self.status is None: self.status = self.FIRST_STATUS
         super(Product, self).save(*args, **kwargs)
     
+    def get_counts(self):
+        result = Product.objects.values('status').annotate(count=Count('status'))
+        counts = {}
+        all = 0
+        for status in Product.STATUSES:
+            counts[status] = 0
+            for row in result:
+                if status == row['status']:
+                    counts[status] = row['count']
+            all += counts[status]
+        counts['wszystkie'] = all
+        return counts
+    
     def __unicode__(self):
         return self.name
+    
 class Comment(models.Model):
     COMMENT, STATUS_CHANGE, HARDWARE_ADD = ('komentarz', 'zmiana_statusu', 'sprzet')
     COMMENT_PLURAL, STATUS_CHANGE_PLURAL, HARDWARE_ADD_PLURAL = ('komenatrz', 'zmiana statusu', 'sprzęt')
@@ -122,3 +171,4 @@ class Comment(models.Model):
     
     def __unicode__(self):
         return self.note
+    

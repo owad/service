@@ -13,6 +13,10 @@
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
             <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
+            {% if product.courier > 0 %}
+            <tr><th>Kurier</th><td>{{ courier }}</td></tr>
+            <tr><th>Numer przesyłki: </th><td>{{ product.parcel_number }}</td></tr>
+            {% endif %}
         </table>
     </div>
     <div class="client-data">
@@ -27,6 +31,12 @@
     <div class="clearBoth"></div>
     {% if comment_list %}
     <h2>Historia</h2>
+    <div class="return-link">
+        {% if product.status != product.CLOSED %}
+        <a id="ajax-comment-add-top" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+        {% endif %}
+        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+    </div>
     <table class="comment-list">
         <tr>
             <th class="left">Notatka</th>
@@ -34,14 +44,23 @@
             <th>Koszt usułgi</th>
             <th>Koszt dojazdu</th>
             <th>Data</th>
+            <th></th>
         </tr>
     {% for comment in product.comment_set.all %}
         <tr style="background-color:#{% cycle 'eee' 'fff' %};">
-            <td>{% if comment.type == comment.HARDWARE_ADD %} Wydanie sprzętu: {% endif %}{{ comment.note }}</td>
+            <td>{{ comment.note }}</td>
             <td class="center">{{ comment.hardware|pln }}</td>
             <td class="center">{{ comment.software|pln }}</td>
             <td class="center">{{ comment.transport|pln }}</td>
             <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
+            <td class="center">
+                {% if user.is_staff %}
+                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a> 
+                {% endif %}
+                <script type="text/javascript">
+                    $("#delete-comment" + {{ comment.id }}).fancybox();
+                </script>
+            </td>
         </tr>
     {% empty %}
         <tr>
@@ -52,8 +71,9 @@
     {% endif %}
     
     <div class="return-link">
-        <a href="{% url product-list %}">powrót</a>
-        <a id="ajax-comment-add" href="{% url comment-add product.id %}">komentarz</a>
+        {% if product.status != product.CLOSED %}
+        <a id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+        {% endif %}
         <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
     </div>
     <div class="clearBoth"></div>

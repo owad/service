@@ -2,7 +2,7 @@
 {% block title %} {{ block.super }} - nowe zgłoszenie {% endblock %}
 {% block content %}
     {% block content-header %}
-    <h2>Nowe zgłoszenie dla klienta {{ client }}</h2>
+    <h2>Nowe zgłoszenie dla klienta {{ object }}</h2>
     {% endblock %}
     <div class="product-add">
         <form action="" method="POST">{% csrf_token %}

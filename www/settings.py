@@ -126,6 +126,8 @@ INSTALLED_APPS = (
     'product',
     'report',
     'pdf',
+    'dajaxice',
+    'dajax',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -4,15 +4,14 @@
     <h2>Klienci</h2>
     {% endblock %}
     <table class="client-list">
-    {% if client_list %}
         <tr>
-            <th class="left">ID</th>
-            <th class="left">Imię</th>
-            <th class="left">Nazwisko</th>
-            <th class="left">Firma</th>
-            <th class="left">Adres</th>
-            <th class="left">E-mail</th>
-            <th></th>
+           <th class="left">ID</th>
+           <th class="left">Imię</th>
+           <th class="left">Nazwisko</th>
+           <th class="left">Firma</th>
+           <th class="left">Adres</th>
+           <th class="left">E-mail</th>
+           <th></th>
         </tr>
         {% for client in client_list %}
         <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url client-details client.id %}'">
@@ -22,14 +21,13 @@
             <td>{{ client.company_name|default:"-" }}</td>
             <td>{{ client.get_address_lines }}</td>
             <td>{{ client.email|default:"-" }}</td>
-			<td><a href="{% url client-edit client.id %}">edycja</a></td>
+            <td><a href="{% url client-edit client.id %}">edycja</a></td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="4">Brak zgłoszeń</td>
+          <td colspan="4">Brak klientów</td>
         </tr>
-        {% endfor %}
-    {% endif %}
+    {% endfor %}
     </table>
     
     {% if page_obj %}

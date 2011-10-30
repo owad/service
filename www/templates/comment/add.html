@@ -1,10 +1,20 @@
+<h3>Nowy komenatrz</h3>
 <form action="" method="post" id="comment-form" onsubmit="return false;">
     {% csrf_token %}
+    <input type="hidden" name="status_change" id="status_change" value="0" />
     <table>
         {{ form.as_table }}
         <tr>
             <td></td>
-            <td><input type="submit" value="dodaj" /></td>
+            <td>
+                {% if product.status != product.COURIER %}
+                <input type="submit" value="skomentuj{% if user.is_staff %}/dodaj sprzęt{% endif %}" onclick="$('#status_change').val(0); "/>
+                {% endif %}
+                <input type="submit" value="zmień status" onclick="$('#status_change').val(1); "/>
+                {% if product.status == product.PROCESSING %}
+                <input type="submit" value="do wysłania" onclick="$('#status_change').val(2); "/>
+                {% endif %}
+            </td>
         </tr>
     </table>
 </form>
@@ -14,7 +24,7 @@ $("#comment-form").bind('submit', function() {
     $.ajax({
         type: "POST",
         cache: false,
-        url: "{% url comment-add product_id %}",
+        url: "{% url comment-add product.id %}",
         data: $(this).serializeArray(),
         success: function(data) {
             json = $.parseJSON(data)

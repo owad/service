@@ -1,17 +1,19 @@
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView
-from django.db.models import Count
+from django.views.generic.edit import CreateView, DeleteView
 from django import template
 from django.template import loader, RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
+from django.db.models import Q
 
-from product.models import Product
-from product.forms import ProductForm
+from product.models import Product, Comment, Courier
+from product.forms import ProductForm, CommentForm, CourierCommentForm
 from person.models import Client
-from product.forms import CommentForm
+
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
 
 register = template.Library()
 
@@ -25,6 +27,8 @@ class ProductDetailView(CreateView):
         product = get_object_or_404(Product, pk=self.kwargs['pk'])
         data['product'] = product
         data['user'] = self.request.user
+        if product.courier:
+            data['courier'] = Courier.objects.get(pk=product.courier)
         data['comment_list'] = product.comment_set.all().order_by('id')
         data['comment_form'] = CommentForm(initial={'user': self.request.user, 'product': product})
         data['hardware_comment_form'] = CommentForm(initial={'user': self.request.user, 'product': product})
@@ -44,18 +48,8 @@ class ProductListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
-        count_result = Product.objects.values('status').annotate(count=Count('status'))
-        tpl_status_counts = {}
-        external = 0
-        all = 0
-        for row in count_result:
-            tpl_status_counts[row['status']] = row['count']
-            if row['status'] in (Product.EXTERNAL, Product.COURIER): 
-                external = external + int(row['count'])
-            all = all + int(row['count'])
-        tpl_status_counts['wszystkie'] = all
-        tpl_status_counts['serwis_zew'] = external
-        context['counts'] = tpl_status_counts
+        products = Product()
+        context['counts'] = products.get_counts()
         return context
     
     def get_queryset(self):
@@ -69,7 +63,8 @@ class ProductListView(ListView):
         else:
             if 'status' in self.kwargs and self.kwargs['status'] in Product.STATUSES:
                 return Product.objects.all().filter(status__exact=self.kwargs['status'])
-            else: return Product.objects.all()
+            else:
+                return Product.objects.all()
     
     def get_search_query(self):
         q = None
@@ -82,6 +77,12 @@ class ProductAddView(CreateView):
     queryset = Product.objects.all()
     form_class = ProductForm
     success_url = 'product-details'
+    new_id = None
+    
+    def get_context_data(self, **kwargs):
+        context_data = CreateView.get_context_data(self, **kwargs)
+        context_data['client'] = get_object_or_404(Client, pk=self.kwargs['pk'])
+        return context_data
     
     def get_form_kwargs(self):
         kwargs = CreateView.get_form_kwargs(self)
@@ -90,24 +91,51 @@ class ProductAddView(CreateView):
         return kwargs
     
     def get_success_url(self):
-        return reverse(self.success_url, kwargs={'pk': self.get_object().id})
+        return reverse(self.success_url, kwargs={'pk': self.object.id})
     
 class CommentAddView(CreateView):
     template_name = "comment/add.html"
     form_class = CommentForm
     success_url = 'product-details'
     
+    def get_form_kwargs(self):
+        kwargs = CreateView.get_form_kwargs(self)
+        kwargs['initial']['user'] = self.request.user
+        kwargs['initial']['product'] = get_object_or_404(Product, pk=self.kwargs['product_id'])
+        return kwargs
+    
     def get_context_data(self, **kwargs):
         context_data = CreateView.get_context_data(self, **kwargs)
-        context_data['product_id'] = self.kwargs['product_id']
+        context_data['product'] = get_object_or_404(Product, pk=self.kwargs['product_id'])
         return context_data
+    
+    def get_form(self, form_class):
+        product = self.get_context_data()['product']
+        if product.status == Product.COURIER:
+            form_class = CourierCommentForm
+        elif self.request.user.is_staff:
+            form_class = StaffCommentForm
+        else:
+            form_class = CommentForm
+        return CreateView.get_form(self, form_class)
     
     def form_valid(self, form):
         form.save()
+        product = get_object_or_404(Product, pk=self.request.POST['product'])
+        if 'status_change' in self.request.POST and int(self.request.POST['status_change']) > 0:
+            product.set_next_status(self.request)
+            product.save()
         json = simplejson.dumps({'success': True, 'data': ''})
         return HttpResponse(json)
     
     def form_invalid(self, form):
+        product = get_object_or_404(Product, pk=self.request.POST['product'])
+        #if product.status != Product.COURIER and 'status_change' in self.request.POST and int(self.request.POST['status_change']) > 0:
+        #    product.set_next_status(self.request)
+        #    product.save()
+        #    json = simplejson.dumps({'success': True, 'data': ''})
+        #    return HttpResponse(json)
+        #else:
         html = loader.render_to_string(self.template_name, 
                                        dictionary=self.get_context_data(form=form), 
                                        context_instance=RequestContext(self.request))
@@ -116,3 +144,22 @@ class CommentAddView(CreateView):
     
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'pk': self.kwargs['product_id']})
+
+class CommentDeleteView(DeleteView):
+    template_view = "comment/delete.html"
+    model = Comment
+    success_url = 'product-details'
+    
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        id = self.object.product.id
+        if request.user.is_staff:
+            self.object.delete()
+        return HttpResponseRedirect(self.get_success_url(id))
+    
+    def get_template_names(self):
+        return [self.template_view]
+    
+    def get_success_url(self, id):
+        return reverse(self.success_url, kwargs={'pk': id})
+    

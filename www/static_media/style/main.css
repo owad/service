@@ -87,7 +87,8 @@ div.client-details {
 }
 div.comment-add form table { width: 700px; }
 div.comment-add th { text-align: right; padding-right: 5px; width: 120px; vertical-align: top; padding-top: 5px; } 
-div.client-add, div.product-add { width: 580px; }
+div.product-add { width: 580px; }
+div.client-add { width: 610px; }
 div.product-add input { width: 150px; }
 div.product-add th { text-align: right; padding-right: 5px; width: 200px; }
 div.pagination { clear: both; text-align: center; }
