@@ -14,7 +14,7 @@ class ProductForm(ModelForm):
             'user': HiddenInput(),
             'status': HiddenInput(attrs={'value': Product.FIRST_STATUS})
         }
-        exclude = ('parcel_number', 'external_service_name', 'courier')
+        exclude = ('parcel_number', 'external_service_name', 'courier', 'fixed_by')
     warranty = ChoiceField(choices=Product.WARRANTY_CHOICES, initial=Product.N, label='Gwarancja')
     
 class ProductStatusChangeForm(ProductForm):

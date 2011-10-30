@@ -18,28 +18,29 @@ class Courier(models.Model):
 class Product(models.Model):
     DECIMAL_ZERO = '0.00'
     NEW, PROCESSING, COURIER = ('przyjety', 'w_realizacji', 'do_wyslania')
-    EXTERNAL, READY, CLOSED = ('w_serwisie', 'do_wydania', 'wydany')
-    STATUSES = (NEW, PROCESSING, COURIER, EXTERNAL, READY, CLOSED)
+    EXTERNAL, BACK, READY, CLOSED = ('w_serwisie', 'z_serwisu', 'do_wydania', 'wydany')
+    STATUSES = (NEW, PROCESSING, COURIER, EXTERNAL, BACK, READY, CLOSED)
     
-    NEW_PLURAL, PROCESSING_PLURAL, COURIER_PLURAL = ('przyjęty', 'w realizacji', 'do wysłania')
-    EXTERNAL_PLURAL, READY_PLURAL, CLOSED_PLURAL = ('w serwisie', 'do wydania', 'wydany')
+    NEW_NICE, PROCESSING_NICE, COURIER_NICE = ('przyjęty', 'w realizacji', 'do wysłania')
+    EXTERNAL_NICE, BACK_NICE, READY_NICE, CLOSED_NICE = ('w serwisie zew.', 'odebrano z serwisu zew.', 'do wydania', 'wydany')
     STATUS_CHOICES = (
-        (NEW, NEW_PLURAL),
-        (PROCESSING, PROCESSING_PLURAL),
-        (COURIER, COURIER_PLURAL),
-        (EXTERNAL, EXTERNAL_PLURAL),
-        (READY, READY_PLURAL),
-        (CLOSED, CLOSED_PLURAL)
+        (NEW, NEW_NICE),
+        (PROCESSING, PROCESSING_NICE),
+        (COURIER, COURIER_NICE),
+        (EXTERNAL, EXTERNAL_NICE),
+        (BACK, BACK_NICE),
+        (READY, READY_NICE),
+        (CLOSED, CLOSED_NICE)
     )
     
     FIRST_STATUS = NEW
     LAST_STATUS = CLOSED
     
     Y, N = ('Y', 'N')
-    Y_PLURAL, N_PLURAL = ('Tak', 'Nie')
+    Y_NICE, N_NICE = ('Tak', 'Nie')
     WARRANTY_CHOICES = ( 
-        (N, N_PLURAL),
-        (Y, Y_PLURAL)
+        (N, N_NICE),
+        (Y, Y_NICE)
     )
 
     name = models.CharField(max_length=128, verbose_name='nazwa')
@@ -57,6 +58,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name='ostatnia akutalizajca')
     
     user = models.ForeignKey(User, verbose_name='pracownik')
+    fixed_by = models.IntegerField(null=True, blank=True, verbose_name='wykonane przez', choices=[(obj.id, obj) for obj in User.objects.all()])
     client = models.ForeignKey(Client, verbose_name='klient')
     
     class Meta:
@@ -84,18 +86,10 @@ class Product(models.Model):
             self.status = Product.READY
         else: 
             self.status = self.get_next_status()
-        
-        if old_status != self.status:
-            new_comment = Comment()
-            new_comment.note = 'Zmiana statusu na %s' % (self.get_status_name(),)
-            new_comment.type = Comment.STATUS_CHANGE
-            new_comment.user_id = request.user.id
-            new_comment.product_id = POST['product']
-            new_comment.save()
-        
         if old_status == self.COURIER:
             self.parcel_number = POST['parcel_number']
             self.courier = POST['courier']
+        return self.status
         
     def get_status_name(self):
         for status in self.STATUS_CHOICES:
@@ -115,8 +109,8 @@ class Product(models.Model):
         return self.get_hardware_cost() + self.get_software_cost() + self.get_transport_cost()
     
     def get_warranty_name(self):
-        if self.warranty == self.N: return self.Y_PLURAL
-        else: return self.N_PLURAL
+        if self.warranty == self.N: return self.Y_NICE
+        else: return self.N_NICE
     
     def save(self, *args, **kwargs):
         if self.warranty is None: self.warranty = self.N
@@ -141,11 +135,11 @@ class Product(models.Model):
     
 class Comment(models.Model):
     COMMENT, STATUS_CHANGE, HARDWARE_ADD = ('komentarz', 'zmiana_statusu', 'sprzet')
-    COMMENT_PLURAL, STATUS_CHANGE_PLURAL, HARDWARE_ADD_PLURAL = ('komenatrz', 'zmiana statusu', 'sprzęt')
+    COMMENT_NICE, STATUS_CHANGE_NICE, HARDWARE_ADD_NICE = ('komenatrz', 'zmiana statusu', 'sprzęt')
     TYPES = (
-        (COMMENT, COMMENT_PLURAL),
-        (STATUS_CHANGE, STATUS_CHANGE_PLURAL),
-        (HARDWARE_ADD, HARDWARE_ADD_PLURAL)
+        (COMMENT, COMMENT_NICE),
+        (STATUS_CHANGE, STATUS_CHANGE_NICE),
+        (HARDWARE_ADD, HARDWARE_ADD_NICE)
     )
     
     DECIMAL_ZERO = '0.00'
@@ -169,6 +163,14 @@ class Comment(models.Model):
         if self.transport is None: self.transport = self.DECIMAL_ZERO
         super(Comment, self).save(*args, **kwargs)
     
+    def set_comment_type(self, type_id):
+        if float(self.hardware) > 0.0:
+            self.type = self.HARDWARE_ADD
+        elif type_id > 0:
+            self.type = self.STATUS_CHANGE
+        else:
+            self.type = self.COMMENT
+            
     def __unicode__(self):
         return self.note
     

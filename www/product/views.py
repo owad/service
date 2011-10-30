@@ -9,7 +9,7 @@ from django.utils import simplejson
 from django.db.models import Q
 
 from product.models import Product, Comment, Courier
-from product.forms import ProductForm, CommentForm, CourierCommentForm
+from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm
 from person.models import Client
 
 from dajax.core import Dajax
@@ -120,22 +120,23 @@ class CommentAddView(CreateView):
         return CreateView.get_form(self, form_class)
     
     def form_valid(self, form):
-        form.save()
         product = get_object_or_404(Product, pk=self.request.POST['product'])
+        new_comment = form.save(commit=False)
+        save = True
         if 'status_change' in self.request.POST and int(self.request.POST['status_change']) > 0:
-            product.set_next_status(self.request)
-            product.save()
+            new_status = product.set_next_status(self.request)
+            if new_status == Product.LAST_STATUS and not self.request.user.is_staff:
+                save = False
+            if new_status == Product.READY:
+                product.fixed_by = self.request.user.id
+            new_comment.set_comment_type(int(self.request.POST['status_change']))
         json = simplejson.dumps({'success': True, 'data': ''})
+        if save: 
+            product.save()
+            new_comment.save()
         return HttpResponse(json)
     
     def form_invalid(self, form):
-        product = get_object_or_404(Product, pk=self.request.POST['product'])
-        #if product.status != Product.COURIER and 'status_change' in self.request.POST and int(self.request.POST['status_change']) > 0:
-        #    product.set_next_status(self.request)
-        #    product.save()
-        #    json = simplejson.dumps({'success': True, 'data': ''})
-        #    return HttpResponse(json)
-        #else:
         html = loader.render_to_string(self.template_name, 
                                        dictionary=self.get_context_data(form=form), 
                                        context_instance=RequestContext(self.request))

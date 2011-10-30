@@ -1,4 +1,10 @@
 from django.views.generic import TemplateView
+from django.db.models import Q
+from django.db.models import Sum
+import datetime
+
+from product.models import Product, Comment
+from report.forms import ReportForm
 
 class ReportView(TemplateView):
     template_name = 'reports/main.html'
@@ -27,11 +33,13 @@ class ReportView(TemplateView):
             context['report']['tran'] = tran
             context['report']['sum'] = sum
         return context
+    
     def post(self, request, *args, **kwargs):
         self._form = ReportForm(request.POST)
         if self._form.is_valid():
             self._report_data = self._form.data
         return self.get(request)
+    
     def get_report_sum(self, cost_type):
         if self._report_data:
             startdate = datetime.date(year=int(self._report_data['start_date_year']), month=int(self._report_data['start_date_month']), day=int(self._report_data['start_date_day']))

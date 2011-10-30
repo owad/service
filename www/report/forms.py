@@ -2,9 +2,11 @@
 from django import forms
 from django.forms import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple, SelectMultiple
-from person.models import User
 from django.forms.extras.widgets import SelectDateWidget
 import datetime
+
+from person.models import User
+from product.models import Product
 
 class ReportForm(forms.Form):
     userModel = User()
