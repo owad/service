@@ -117,7 +117,8 @@ class CommentAddView(CreateView):
             form_class = StaffCommentForm
         else:
             form_class = CommentForm
-        return CreateView.get_form(self, form_class)
+        form = CreateView.get_form(self, form_class)
+        return form
     
     def form_valid(self, form):
         product = get_object_or_404(Product, pk=self.request.POST['product'])

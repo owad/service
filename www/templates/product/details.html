@@ -12,6 +12,7 @@
             <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
+            <tr><th>Koszt naprawy</th><td>{{ product.max_cost|default:"-" }}</td></tr>
             <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
             {% if product.courier > 0 %}
             <tr><th>Kurier</th><td>{{ courier }}</td></tr>
@@ -25,6 +26,7 @@
             <tr><td>{{ product.client.first_name }} {{ product.client.last_name }}</td></tr>
             <tr><td>{{ product.client.company_name }}</td></tr>
             <tr><td>{{ product.client.email }}</td></tr>
+            <tr><td>{% if product.client.phone_number %}{{ product.client.phone_number }}{% endif %}</td></tr>
             <tr><td><div class="product-add-link"><a href="{% url client-edit product.client.id %}">edycja danych klienta</a></div></td></tr>
         </table>
     </div>
