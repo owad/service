@@ -10,6 +10,7 @@
         <table>
             <tr><th>Nazwa: </th><td>{{ product.name }}</td></tr>
             <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
+            <tr><th>Notatka: </th><td>{{ product.description|default:"-" }}</td></tr>
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
             <tr><th>Koszt naprawy</th><td>{{ product.max_cost|default:"-" }}</td></tr>
@@ -45,6 +46,7 @@
             <th>Koszt sprzętu</th>
             <th>Koszt usułgi</th>
             <th>Koszt dojazdu</th>
+            <th>Status</th>
             <th>Data</th>
             <th></th>
         </tr>
@@ -54,6 +56,7 @@
             <td class="center">{{ comment.hardware|pln }}</td>
             <td class="center">{{ comment.software|pln }}</td>
             <td class="center">{{ comment.transport|pln }}</td>
+            <td class="center">{{ comment.get_status_name }}</td>
             <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
             <td class="center">
                 {% if user.is_staff %}

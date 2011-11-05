@@ -20,10 +20,12 @@ class ProductForm(ModelForm):
     
     def full_clean(self):
         ModelForm.full_clean(self)
-        max_cost_errors = self._errors.setdefault("max_cost", ErrorList())
+        max_cost_errors = self._errors.get('max_cost')
         if not max_cost_errors:
-            if self.data['warranty'] == Product.N and float(self.data['max_cost']) == 0:
+            if 'warranty' in self.data and self.data['warranty'] == Product.N and float(self.data['max_cost']) <= 0.00:
+                max_cost_errors = self._errors.setdefault("max_cost", ErrorList())
                 max_cost_errors.append("Podaj maksymalny koszt naprawy")
+        
         
 class ProductStatusChangeForm(ProductForm):
     class Meta:
@@ -38,7 +40,7 @@ class CommentForm(ModelForm):
             'type': HiddenInput(attrs={'value': Comment.COMMENT})
         }
         exclude = ('hardware', 'status')
-    
+        
 class StaffCommentForm(CommentForm):
     class Meta:
         model = Comment

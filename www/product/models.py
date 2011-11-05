@@ -93,10 +93,25 @@ class Product(models.Model):
             self.courier = POST['courier']
         return self.status
         
-    def get_status_name(self):
-        for status in self.STATUS_CHOICES:
-            if self.status == status[0]: return status[1]
+    def get_status_name(self, status = None):
+        if status:
+            key = status
+        else:
+            key = self.status
+        for statuses in self.STATUS_CHOICES:
+            if key == statuses[0]:
+                return statuses[1]
         return self.FIRST_STATUS
+    
+    def get_next_status_name(self):
+        return self.get_status_name(self.get_next_status())
+    
+    def get_next_status_name_no_external(self):
+        if self.status == self.PROCESSING:
+            key = self.READY
+        else:
+            key = self.status
+        return self.get_status_name(status=key)
     
     def get_hardware_cost(self):
         return self.comment_set.aggregate(sum=Sum('hardware'))['sum']
@@ -175,7 +190,12 @@ class Comment(models.Model):
             self.type = self.STATUS_CHANGE
         else:
             self.type = self.COMMENT
-            
+    
+    def get_status_name(self):
+        for statuses in Product.STATUS_CHOICES:
+            if self.status == statuses[0]:
+                return statuses[1]
+    
     def __unicode__(self):
         return self.note
     
