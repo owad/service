@@ -11,7 +11,7 @@
                     <input type="submit" value="skomentuj{% if user.is_staff %}/dodaj sprzęt{% endif %}" onclick="$('#status_change').val(0); "/>
                 {% endif %}
                 {% if product.status == product.PROCESSING %}
-                    <input type="submit" value="{{ product.get_next_status_name_no_external }}" onclick="$('#status_change').val(1); "/>
+                    <input type="submit" value="{{ product.get_next_status_name_no_external }}" onclick="$('#id_note').val('-'); $('#status_change').val(1); "/>
                     <input type="submit" value="do wysłania" onclick="$('#id_note').val('-'); $('#status_change').val(2); "/>
                 {% else %}
                     <input type="submit" value="{{ product.get_next_status_name }}" onclick="{% if product.status == product.COURIER %} $('#id_note').val('-'); {% endif %}$('#status_change').val(1); "/>

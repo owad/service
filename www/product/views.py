@@ -134,6 +134,7 @@ class CommentAddView(CreateView):
         json = simplejson.dumps({'success': True, 'data': ''})
         if save: 
             product.save()
+            new_comment.status = product.status
             new_comment.save()
         return HttpResponse(json)
     

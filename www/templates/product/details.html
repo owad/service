@@ -59,7 +59,7 @@
             <td class="center">{{ comment.get_status_name }}</td>
             <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
             <td class="center">
-                {% if user.is_staff %}
+                {% if user.is_staff and comment.hardware > 0 %}
                 <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
                 <script type="text/javascript">
                     $("#delete-comment" + {{ comment.id }}).fancybox();
