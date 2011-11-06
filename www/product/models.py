@@ -2,6 +2,8 @@
 from django.db import models
 from django.db.models import Sum, Count
 
+from datetime import datetime, timedelta
+
 from person.models import User, Client
 
 class Courier(models.Model):
@@ -146,6 +148,15 @@ class Product(models.Model):
             all += counts[status]
         counts['wszystkie'] = all
         return counts
+    
+    def get_alert(self):
+        color = '';
+        if datetime.now() - timedelta(days=-3) > self.updated \
+            and self.status in (self.NEW, self.PROCESSING, self.COURIER, self.READY):
+            color = '#ff3333'
+        if datetime.now() - timedelta(days=-10) > self.updated and self.status == self.EXTERNAL:
+            color = '#ff6666'
+        return color
     
     def __unicode__(self):
         return self.name
