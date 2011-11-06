@@ -10,9 +10,9 @@ urlpatterns = patterns('',
     url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='logout'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^profil/', include('account.urls')),
-    url(r'^person/', include('person.urls')),
+    url(r'^osoba/', include('person.urls')),
     url(r'^pdf/', include('pdf.urls')),
-    url(r'^report/', include('report.urls')),
+    url(r'^raporty/', include('report.urls')),
     url(r'^', include('product.urls')),
 )
 urlpatterns += staticfiles_urlpatterns()
