@@ -25,7 +25,7 @@
         <td class="center">{{ product.get_warranty_name }}</td>
         <td class="center">{{ product.get_cost|pln }}</td>
         <td class="center">{{ product.get_status_name }}</td>
-        <td>{{ product.parcel_number|default:"-" }}</td>
+        <td>{{ product.client.phone_number|default:"-" }}</td>
         <td class="center">{{ product.created }}</td>
         <td class="center">{{ product.updated }}</td>
     </tr>
