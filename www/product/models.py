@@ -128,8 +128,9 @@ class Product(models.Model):
         return self.get_hardware_cost() + self.get_software_cost() + self.get_transport_cost()
     
     def get_warranty_name(self):
-        if self.warranty == self.N: return self.Y_NICE
-        else: return self.N_NICE
+        if self.warranty == self.N: 
+            return self.N_NICE
+        else: return self.Y_NICE
     
     def save(self, *args, **kwargs):
         if self.warranty is None: self.warranty = self.N
