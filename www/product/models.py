@@ -158,6 +158,9 @@ class Product(models.Model):
             color = '#ff6666'
         return color
     
+    def get_signature(self):
+        return '/'.join((str(self.id), str(self.created.month), str(self.created.year)))
+    
     def __unicode__(self):
         return self.name
     

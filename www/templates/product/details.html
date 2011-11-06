@@ -3,7 +3,7 @@
 {% block title %} {{ block.super }} - {{ product }} {% endblock %}
 {% block content %} 
 {% block content-header %}
-    <h2>Dane zgłoszenia #{{ product.id }}</h2>
+    <h2>Dane zgłoszenia {{ product.get_signature }}</h2>
     {% endblock %}
 <div class="product-details">
     <div class="product-data">
