@@ -12,6 +12,8 @@ from product.models import Product, Comment, Courier
 from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm
 from person.models import Client
 
+from datetime import datetime, timedelta
+
 register = template.Library()
 
 class ProductDetailView(CreateView):
@@ -52,17 +54,32 @@ class ProductListView(ListView):
     def get_queryset(self):
         q = self.get_search_query()
         if q:
-            return Product.objects.filter(Q(id__icontains=q)|
-                                          Q(name__icontains=q)|
-                                          Q(producent__icontains=q)|
-                                          Q(serial__icontains=q)|
-                                          Q(parcel_number__icontains=q)).filter(status__in=Product.IN_PROGRESS)
+            if int(q):
+                return Product.objects.filter(id=q)
+            else:
+                return Product.objects.filter(Q(name__icontains=q)|
+                                              Q(producent__icontains=q)|
+                                              Q(serial__icontains=q)|
+                                              Q(parcel_number__icontains=q)).filter(status__in=Product.IN_PROGRESS)
         else:
             if 'status' in self.kwargs:
-                if self.kwargs['status'] in Product.STATUSES:
-                    return Product.objects.all().filter(status__exact=self.kwargs['status'])
-                if self.kwargs['status'] == 'aktualne':
+                if self.kwargs['status'] == 'moje':
                     return Product.objects.filter(id__in=Comment.objects.filter(user=self.request.user).filter(status__in=Product.IN_PROGRESS))
+                elif self.kwargs['status'] == 'przeterminowane':
+                    return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=3),
+                                                    status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
+                                                  Q(updated__lte=datetime.now() - timedelta(days=10),
+                                                    status=Product.EXTERNAL))
+                elif self.kwargs['status'] == 'moje_przeterminowane':
+                    return Product.objects.filter(id__in=Comment.objects.
+                                                  filter(user=self.request.user).\
+                                                  filter(status__in=Product.IN_PROGRESS)).\
+                                                  filter(Q(updated__lte=datetime.now() - timedelta(days=3),
+                                                    status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
+                                                  Q(updated__lte=datetime.now() - timedelta(days=10),
+                                                    status=Product.EXTERNAL))
+                elif self.kwargs['status'] in Product.STATUSES:
+                    return Product.objects.all().filter(status__exact=self.kwargs['status'])
             else:
                 return Product.objects.all()
     

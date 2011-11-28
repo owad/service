@@ -136,7 +136,7 @@ class Product(models.Model):
         if self.warranty is None: self.warranty = self.N
         if self.status is None: self.status = self.FIRST_STATUS
         super(Product, self).save(*args, **kwargs)
-    
+
     def get_counts(self):
         result = Product.objects.values('status').annotate(count=Count('status'))
         counts = {}
@@ -149,7 +149,7 @@ class Product(models.Model):
             all += counts[status]
         counts['wszystkie'] = all
         return counts
-    
+
     def get_alert(self):
         color = '';
         if datetime.now() - timedelta(days=3) > self.updated \
@@ -158,13 +158,13 @@ class Product(models.Model):
         if datetime.now() - timedelta(days=10) > self.updated and self.status == self.EXTERNAL:
             color = '#ff6666'
         return color
-    
+
     def get_signature(self):
         return '/'.join((str(self.id), str(self.created.month), str(self.created.year)))
     
     def __unicode__(self):
         return self.name
-    
+
 class Comment(models.Model):
     COMMENT, STATUS_CHANGE, HARDWARE_ADD = ('komentarz', 'zmiana_statusu', 'sprzet')
     COMMENT_NICE, STATUS_CHANGE_NICE, HARDWARE_ADD_NICE = ('komenatrz', 'zmiana statusu', 'sprzęt')

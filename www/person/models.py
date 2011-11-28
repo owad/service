@@ -27,6 +27,7 @@ class Client(models.Model):
     postcode = models.CharField(max_length=8, blank=True, verbose_name='kod pocztowy')
     email = models.EmailField(blank=True, verbose_name='e-mail')
     phone_number = models.CharField(max_length=9, verbose_name='telefon', validators=[RegexValidator('^(\d{9})$')])
+    second_phone_number = models.CharField(max_length=9, verbose_name='telefon dodatkowy', validators=[RegexValidator('^(\d{9})$')], blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='data utworzenia')
 
     class Meta:
