@@ -2,7 +2,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.forms.util import ErrorList
-from django.forms.widgets import HiddenInput
+from django.forms.widgets import HiddenInput, Select
 from django.forms import ChoiceField, CharField
 
 from product.models import Product, Comment, Courier
@@ -13,7 +13,8 @@ class ProductForm(ModelForm):
         widgets = {
             'client': HiddenInput(),
             'user': HiddenInput(),
-            'status': HiddenInput(attrs={'value': Product.FIRST_STATUS})
+            'status': HiddenInput(attrs={'value': Product.FIRST_STATUS}),
+            'courier': Select(choices=[(obj.id, obj) for obj in Courier.objects.all()])
         }
         exclude = ('parcel_number', 'external_service_name', 'courier', 'fixed_by')
     warranty = ChoiceField(choices=Product.WARRANTY_CHOICES, initial=Product.N, label='Gwarancja')

@@ -57,12 +57,12 @@ class Product(models.Model):
     external_service_name = models.CharField(max_length=128, blank=True, verbose_name='nazwa serwisu zewnętrznego')
     max_cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='koszt naprawy do', default=DECIMAL_ZERO)
     warranty = models.CharField(choices=WARRANTY_CHOICES, max_length=16, verbose_name='gwarancja')
-    courier = models.IntegerField(null=True, blank=True, choices=[(obj.id, obj) for obj in Courier.objects.all()])
+    courier = models.IntegerField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='data zgłoszenia')
     updated = models.DateTimeField(auto_now=True, verbose_name='ostatnia akutalizajca')
     
     user = models.ForeignKey(User, verbose_name='pracownik')
-    fixed_by = models.IntegerField(null=True, blank=True, verbose_name='wykonane przez', choices=[(obj.id, obj) for obj in User.objects.all()])
+    fixed_by = models.IntegerField(null=True, blank=True, verbose_name='wykonane przez')
     client = models.ForeignKey(Client, verbose_name='klient')
     
     class Meta:
@@ -213,4 +213,3 @@ class Comment(models.Model):
     
     def __unicode__(self):
         return self.note
-    
