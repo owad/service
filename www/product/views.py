@@ -54,7 +54,7 @@ class ProductListView(ListView):
     def get_queryset(self):
         q = self.get_search_query()
         if q:
-            if int(q):
+            if q.isdigit():
                 return Product.objects.filter(id=q)
             else:
                 return Product.objects.filter(Q(name__icontains=q)|
