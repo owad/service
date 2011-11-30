@@ -13,7 +13,7 @@
             <tr><th>Notatka: </th><td>{{ product.description|default:"-" }}</td></tr>
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
-            <tr><th>Koszt naprawy</th><td>{{ product.max_cost|default:"-" }}</td></tr>
+            <tr><th>Przewidywany koszt naprawy do</th><td>{{ product.max_cost|pln }}</td></tr>
             <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
             {% if product.courier > 0 %}
             <tr><th>Kurier</th><td>{{ courier }}</td></tr>

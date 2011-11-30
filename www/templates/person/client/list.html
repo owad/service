@@ -9,7 +9,7 @@
            <th class="left">Imię</th>
            <th class="left">Nazwisko</th>
            <th class="left">Firma</th>
-           <th class="left">Adres</th>
+           <th class="left">Miejscowość</th>
            <th class="left">Telefon</th>
            <th></th>
         </tr>
@@ -19,12 +19,7 @@
             <td>{{ client.first_name }}</td>
             <td>{{ client.last_name }}</td>
             <td>{{ client.company_name|default:"-" }}</td>
-            <td>
-                {% for line in client.get_address_lines %}
-                    {{ line }}
-                    {% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
+            <td>{{ client.city|default:"-" }}</td>
             <td>{{ client.phone_number|default:"-" }}</td>
             <td><a href="{% url client-edit client.id %}">edycja</a></td>
         </tr>

@@ -116,13 +116,13 @@ class Product(models.Model):
         return self.get_status_name(status=key)
     
     def get_hardware_cost(self):
-        return self.comment_set.aggregate(sum=Sum('hardware'))['sum']
+        return float(self.comment_set.aggregate(sum=Sum('hardware'))['sum'])
         
     def get_software_cost(self):
-        return self.comment_set.aggregate(sum=Sum('software'))['sum']
+        return float(self.comment_set.aggregate(sum=Sum('software'))['sum'])
     
     def get_transport_cost(self):
-        return self.comment_set.aggregate(sum=Sum('transport'))['sum']
+        return float(self.comment_set.aggregate(sum=Sum('transport'))['sum'])
     
     def get_cost(self):
         return self.get_hardware_cost() + self.get_software_cost() + self.get_transport_cost()

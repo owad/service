@@ -8,6 +8,7 @@
     {% for line in client.get_address_lines %}
         <div>{{ line }}</div>
     {% endfor %}
+    <div>{{ client.get_phone_numbers }}</div>
     <div>{{ client.email }}</div>
     
     <div class="product-add-link">

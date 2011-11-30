@@ -43,7 +43,7 @@ class ProductListView(ListView):
     context_object_name = "product_list"
     queryset = None
     template_name = 'product/list.html'
-    paginate_by = 50
+    paginate_by = 20
     
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
@@ -64,16 +64,16 @@ class ProductListView(ListView):
         else:
             if 'status' in self.kwargs:
                 if self.kwargs['status'] == 'moje':
-                    return Product.objects.filter(id__in=Comment.objects.filter(user=self.request.user).filter(status__in=Product.IN_PROGRESS))
+                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS).values_list('product_id', flat=True)
+                    return Product.objects.filter(id__in=product_ids)
                 elif self.kwargs['status'] == 'przeterminowane':
                     return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=3),
                                                     status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
                                                   Q(updated__lte=datetime.now() - timedelta(days=10),
                                                     status=Product.EXTERNAL))
                 elif self.kwargs['status'] == 'moje_przeterminowane':
-                    return Product.objects.filter(id__in=Comment.objects.
-                                                  filter(user=self.request.user).\
-                                                  filter(status__in=Product.IN_PROGRESS)).\
+                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS).values_list('product_id', flat=True)
+                    return Product.objects.filter(id__in=product_ids).\
                                                   filter(Q(updated__lte=datetime.now() - timedelta(days=3),
                                                     status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
                                                   Q(updated__lte=datetime.now() - timedelta(days=10),
