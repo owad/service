@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-    <title>Zgłoszenie reklamacyjne nr {{ product.id }} z dnia {{ product.created|date:"d/m/Y" }}</title>
+    <title>Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</title>
     <style type="text/css">
     @font-face { font-family: "DejaVuSans"; src: url("http://www.toolpart.hu/static/media/medialibrary/2010/04/DejaVuSans.ttf"); font-size: 14px; }
     html { font-family: "DejaVuSans"; }
@@ -14,7 +14,7 @@
 <body>
     <table style="border-collapse: collapse; border-spacing: 0px;">
         <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
-            <td colspan="5">Zgłoszenie reklamacyjne nr {{ product.id }} z dnia {{ product.created|date:"d/m/Y" }}</td>
+            <td colspan="5">Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>
@@ -36,6 +36,7 @@
                 <div>{{ client.address_line1 }}</div>
                 <div>{{ client.address_line2 }}</div>
                 <div>{{ client.city }} {{ client.postcode }}</div>
+                <div>{{ client.get_phone_numbers }}</div>
             </td>
         </tr>
         <tr>

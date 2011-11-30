@@ -36,3 +36,19 @@ class Client(models.Model):
     def __unicode__(self):
         if self.company_name: return self.company_name
         else: return "%s %s" % (self.first_name, self.last_name)
+
+    def get_phone_numbers(self):
+        numbers = []
+        if self.phone_number:
+            numbers.append(self.phone_number)
+        if self.second_phone_number:
+            numbers.append(self.second_phone_number)
+        return ', '.join(numbers)
+    
+    def get_address_lines(self):
+        address = []
+        # yes, I know I'm not using keys
+        for value in [self.address_line1, self.address_line2, self.postcode, self.city]:
+            if value:
+                address.append(value)
+        return address

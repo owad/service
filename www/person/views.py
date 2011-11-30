@@ -21,6 +21,7 @@ class ClientListView(ListView):
             return Client.objects.filter(Q(first_name__icontains=q)|
                                          Q(last_name__icontains=q)|
                                          Q(company_name__icontains=q)|
+                                         Q(city__icontains=q)|
                                          Q(phone_number__icontains=q))
         else:
             return Client.objects.all()

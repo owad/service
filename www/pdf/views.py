@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import render_to_response, get_object_or_404, render
@@ -38,5 +40,5 @@ def get_pdf(request, product_id):
     pisa.CreatePDF(file_data.encode('UTF-8'), myfile, encoding='UTF-8')
     myfile.seek(0)
     response =  HttpResponse(myfile, mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=zgloszenie_nr_%s.pdf' % (data['product'].id,)
+    response['Content-Disposition'] = 'filename=%s_zgloszenie_nr_%s.pdf' % (datetime.datetime.now().microsecond, data['product'].id)
     return response

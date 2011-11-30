@@ -22,14 +22,18 @@
         </table>
     </div>
     <div class="client-data">
-        <table>
-            <tr><td><h3>Dane klienta</h3></td></tr>
-            <tr><td>{{ product.client.first_name }} {{ product.client.last_name }}</td></tr>
-            <tr><td>{{ product.client.company_name }}</td></tr>
-            <tr><td>{{ product.client.email }}</td></tr>
-            <tr><td>{% if product.client.phone_number %}{{ product.client.phone_number }}{% endif %}</td></tr>
-            <tr><td><div class="product-add-link"><a href="{% url client-edit product.client.id %}">edycja danych klienta</a></div></td></tr>
-        </table>
+        <h3>Dane klienta</h3>
+            <div>{{ product.client.first_name }} {{ product.client.last_name }}</div>
+            <div>{{ product.client.company_name }}</div>
+            {% for line in product.client.get_address_lines %}
+            <div>{{ line }}</div>
+            {% endfor %}
+            <div>{{ product.client.email }}</div>
+            <div>{{ product.client.get_phone_numbers }}</div>
+            <div class="product-add-link">
+                <a href="{% url client-edit product.client.id %}">edycja danych klienta</a>
+                <a href="{% url client-details product.client.id %}">List zgłoszeń</a>
+            </div>
     </div>
     <div class="clearBoth"></div>
     {% if comment_list %}

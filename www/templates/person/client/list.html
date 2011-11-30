@@ -19,7 +19,12 @@
             <td>{{ client.first_name }}</td>
             <td>{{ client.last_name }}</td>
             <td>{{ client.company_name|default:"-" }}</td>
-            <td>{{ client.get_address_lines }}</td>
+            <td>
+                {% for line in client.get_address_lines %}
+                    {{ line }}
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
             <td>{{ client.phone_number|default:"-" }}</td>
             <td><a href="{% url client-edit client.id %}">edycja</a></td>
         </tr>

@@ -5,10 +5,9 @@
 <div class="client-details">
     <div>{{ client.first_name }} {{ client.last_name }}</div>
     <div>{{ client.company_name }}</div>
-    <div>{{ client.address_line1 }}</div>
-    <div>{{ client.address_line2 }}</div>
-    <div>{{ client.city }}</div>
-    <div>{{ client.postcode }}</div>
+    {% for line in client.get_address_lines %}
+        <div>{{ line }}</div>
+    {% endfor %}
     <div>{{ client.email }}</div>
     
     <div class="product-add-link">

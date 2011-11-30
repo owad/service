@@ -51,7 +51,7 @@ class Product(models.Model):
     producent = models.CharField(max_length=128, blank=True, verbose_name='producent')
     serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
-    description = models.TextField(blank=True, verbose_name='opis usterki')
+    description = models.TextField(verbose_name='opis usterki')
     status = models.CharField(choices=STATUS_CHOICES, max_length=32)
     parcel_number = models.CharField(max_length=64, blank=True, verbose_name='numer przesyłki')
     external_service_name = models.CharField(max_length=128, blank=True, verbose_name='nazwa serwisu zewnętrznego')
@@ -160,7 +160,7 @@ class Product(models.Model):
         return color
 
     def get_signature(self):
-        return '/'.join((str(self.id), str(self.created.month), str(self.created.year)))
+        return '/'.join([str(self.id), str(self.created.year)])
     
     def __unicode__(self):
         return self.name
