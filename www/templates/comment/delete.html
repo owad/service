@@ -1,7 +1,0 @@
-<h3>Usuń komentarz</h3>
-<p>Czy jesteś pewny, że chcesz usunąć komentarz "{{ object }}"?
-<form action="{% url comment-del object.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="tak" />
-    <input type="button" value="nie" onclick="$.fancybox.close();" />
-</form>
