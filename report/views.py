@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.db.models import Q
 from django.db.models import Sum
@@ -24,14 +26,14 @@ class ReportView(TemplateView):
             hard = self.get_report_sum('hardware')
             soft = self.get_report_sum('software')
             tran = self.get_report_sum('transport')
-            sum = 0
+            summary = 0
             for cost in [hard, soft, tran]:
-                if cost: sum = sum + cost
+                if cost: summary += cost
             context['report'] = {}
             context['report']['hard'] = hard
             context['report']['soft'] = soft
             context['report']['tran'] = tran
-            context['report']['sum'] = sum
+            context['report']['sum'] = summary
         return context
     
     def post(self, request, *args, **kwargs):
