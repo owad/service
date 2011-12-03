@@ -1,0 +1,117 @@
+{% load service_extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+    <title>Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</title>
+    <style type="text/css">
+    @font-face { font-family: "DejaVuSans"; src: url("http://www.toolpart.hu/static/media/medialibrary/2010/04/DejaVuSans.ttf"); font-size: 14px; }
+    html { font-family: "DejaVuSans"; }
+    td { padding-top: 5px; }
+    </style>
+</head>
+<body>
+    <table style="border-collapse: collapse; border-spacing: 0px;">
+        <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
+            <td colspan="5">Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <div>LECH-KOM Lubaczów</div>
+                <div>ul. Konery 3</div>
+                <div>37-600 Lubaczów</div>
+                <div>tel. 16-6320977</div>
+                <div>e-mail: biuro@lechkom.pl</div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <div>{{ client.first_name }} {{ client.last_name }}</div>
+                <div>{{ client.company_name }}</div>
+                <div>{{ client.address_line1 }}</div>
+                <div>{{ client.address_line2 }}</div>
+                <div>{{ client.city }} {{ client.postcode }}</div>
+                <div>{{ client.get_phone_numbers }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
+            <td colspan="5">Status zgłoszenia: {{ product.get_status_name }}</td>
+        </tr>
+        <tr>
+            <td style="text-align: right; width: 350px;">
+                <div>nazwa:</div>
+                <div>numer seryjny:</div>
+                <div>opis usterki:</div>
+                <div>naprawa gwarancyjna:</div>
+                <div>koszt naprawy:</div>
+                {% if product.status == product.NEW %}
+                <div>przewidywany koszt naprawy do:</div>
+                {% endif %}
+            </td>
+            <td>
+                <div>&nbsp;{{ product.name|lower }} {{ product.producent|lower }}</div>
+                <div>&nbsp;{{ product.serial_number|default:"brak" }}</div>
+                <div>&nbsp;{{ product.description|default:"nie podano" }}</div>
+                <div>&nbsp;{{ product.get_warranty_name|lower }}</div>
+                <div>&nbsp;{{ product.get_cost|pln }}</div>
+                {% if product.status == product.NEW %}
+                <div>&nbsp;{{ product.max_cost|pln }}</div>
+                {% endif %}
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
+            <td colspan="5">Historia zgłoszenia</td>
+        </tr>
+        {% for comment in comment_list %}
+        <tr>
+            <td style="border-bottom: 1px solid black; width: 200px;">{{ comment.created }}</td>
+            <td style="border-bottom: 1px solid black; text-align: left; width: 200px;">{{ comment.user }}</td>
+            <td colspan="3" style="border-bottom: 1px solid black; text-align: left;">{{ comment }} {{ comment|comment_costs }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">czytelny podpis klienta</td>
+            <td></td>
+            <td colspan="2">pracownik: {{ product.user }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div style="font-weight: bold; font-size: 14px;">UWAGA</div>
+                <div>Serwis nie ponosi odpowiedzialności za utratę danych zawartych w przekazanym sprzęcie.</div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

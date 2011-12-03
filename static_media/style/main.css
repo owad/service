@@ -1,0 +1,111 @@
+@CHARSET "UTF-8";
+body { color: #333; font-family: Tahoma, Helvetica; background-color: #000; }
+div.site { background-color: #ccc; width: 90%; margin: 0px auto; padding: 10px; }
+a { color: #000; text-decoration: none; }
+a:hover { color: #00F; text-decoration: underline; }
+table { width: 100%; border-collapse: collapse; border-spacing: 0px; }
+table { margin: 2px 0px; padding: 5px 0px; }
+td { padding: 3px; }
+ul.errorlist { color: #333; width: 200px; float: right; margin: 0px; list-style-type: none; padding: 3px 0px; }
+.clearBoth { clear: both; }
+.center { text-align: center; }
+.left { text-align: left; }
+.row1 { background-color: #eee; }
+.row2 { background-color: #ddd; }
+div.top-row { clear: both; display: block; padding-bottom: 40px; }
+div.content { font-size: 14px; clear: both; }
+div.login-form {
+    display: block;
+    width: 400px;
+    margin: 0px auto;
+}
+div.logout-view {
+    text-align: center; 
+    display: block;
+    width: 400px;
+    margin: 0px auto;
+    background-color: #eee; 
+}
+div.logout-view a {
+    color: #1a1; 
+}
+
+div.login-form th { text-align: right; padding-right: 5px; }
+
+table.report { width: 610px; }
+table.report th { text-align: right; padding-right: 5px; width: 150px; }
+table.report ul { list-style: none; padding-left: 0px; }
+table.report li { }
+table.client-list tr:hover > td, table.product-list tr:hover > td { color: #fff; background-color: #aaa; cursor: pointer;}
+table.client-list th, table.product-list th, table.comment-list {  }
+div.account-info { 
+    float: right; 
+    width: 50%; 
+    text-align: right;
+    margin: 5px 0px; 
+}
+div.account-info span {
+    margin-right: 10px; 
+}
+div.top-menu { 
+    margin: 5px 0px;
+    width: 50%; 
+    float: left;
+}
+div.top-menu a { 
+    margin: 0px 5px 0px 0px;
+    background-color: #999;
+    padding: 5px;
+}
+div.return-link, div.product-add-link { 
+    margin: 10px 0px;
+    width: 50%; 
+    float: left;
+}
+div.return-link a, div.product-add-link a { 
+    background-color: #999;
+    padding: 5px;
+}
+div.return-link a:hover, div.product-add-link a:hover {
+    background-color: #999;
+    text-decoration: none;
+    color: #000;
+}
+div.account-info a { 
+    margin: 0px;
+    background-color: #999;
+    padding: 5px;
+}
+div.top-menu a:hover, div.account-info a:hover {
+    background-color: #999;
+    text-decoration: none;
+    color: #000;
+}
+div.client-details {
+    font-size: 15px; 
+    margin: 5px 0px;
+}
+div.comment-add form table { width: 700px; }
+div.comment-add th { text-align: right; padding-right: 5px; width: 120px; vertical-align: top; padding-top: 5px; } 
+div.product-add { width: 580px; }
+div.client-add { width: 610px; }
+div.product-add input { width: 150px; }
+div.product-add th { text-align: right; padding-right: 5px; width: 200px; }
+div.pagination { clear: both; text-align: center; }
+
+div.product-details div.product-data { width: 50%; float: left; }
+div.product-details div.client-data { width: 50%; float: left; }
+
+div.client-add th, div.product-data th { width: 150px; text-align: right; padding-right: 5px; }
+div.footer { display: block; padding: 0px 5px; text-align: right; clear: both; }
+
+div.search-forms { display: block; clear: both; padding: 10px 10px; background-color: #ddd; }
+div.client-search, div.product-search { float: left; margin-right: 100px; }
+
+span.product-types { font-size: 13px; font-weight: normal; }
+
+div.author { width: 200px; float: right; text-align: center; }
+
+li.error, p.error { color: #d00; font-weight: bold; text-align: center;}
+
+#dialog { font-size: 10px; }
