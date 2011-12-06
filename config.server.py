@@ -3,10 +3,10 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '{{ DB_NAME }}',
-        'USER': '{{ DB_USER }}',
-        'PASSWORD': '{{ DB_PASSWORD }}',
-        'HOST': 'localhost',
+        'NAME': 'iserwis',
+        'USER': 'iserwis',
+        'PASSWORD': 'dupa.8',
+        'HOST': 'lule.pl',
         'PORT': '',
         'OPTIONS': {
             "init_command": "SET storage_engine=INNODB"

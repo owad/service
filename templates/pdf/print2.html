@@ -46,29 +46,37 @@
             <td colspan="5">Status zgłoszenia: {{ product.get_status_name }}</td>
         </tr>
         <tr>
-            <td style="text-align: right; width: 350px;">
-                <div>nazwa:</div>
-                <div>numer seryjny:</div>
-                <div>opis usterki:</div>
-                <div>naprawa gwarancyjna:</div>
-                <div>koszt naprawy:</div>
-                {% if product.status == product.NEW %}
-                <div>przewidywany koszt naprawy do:</div>
-                {% endif %}
+            <td colspan="5">
+                <table>
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">nazwa:</td>
+                        <td>{{ product.name|lower }} {{ product.producent|lower }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">numer seryjny:</td>
+                        <td>{{ product.serial_number|default:"brak" }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">opis usterki:</td>
+                        <td>{{ product.description|default:"nie podano" }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">naprawa gwarancyjna:</td>
+                        <td>{{ product.get_warranty_name|lower }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">koszt naprawy:</td>
+                        <td>{{ product.get_cost|pln }}</td>
+                    </tr>
+                    {% if product.status == product.NEW %}
+                    <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">przewidywany koszt naprawy do:</td>
+                        <td>{{ product.max_cost|pln }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
             </td>
-            <td>
-                <div>&nbsp;{{ product.name|lower }} {{ product.producent|lower }}</div>
-                <div>&nbsp;{{ product.serial_number|default:"brak" }}</div>
-                <div>&nbsp;{{ product.description|default:"nie podano" }}</div>
-                <div>&nbsp;{{ product.get_warranty_name|lower }}</div>
-                <div>&nbsp;{{ product.get_cost|pln }}</div>
-                {% if product.status == product.NEW %}
-                <div>&nbsp;{{ product.max_cost|pln }}</div>
-                {% endif %}
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>
@@ -98,7 +106,8 @@
         <tr>
             <td colspan="2">czytelny podpis klienta</td>
             <td></td>
-            <td colspan="2">pracownik: {{ product.user }}</td>
+            <td></td>
+            <td>pracownik: {{ product.user }}</td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>

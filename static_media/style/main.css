@@ -10,6 +10,7 @@ ul.errorlist { color: #333; width: 200px; float: right; margin: 0px; list-style-
 .clearBoth { clear: both; }
 .center { text-align: center; }
 .left { text-align: left; }
+.right { text-align: right; }
 .row1 { background-color: #eee; }
 .row2 { background-color: #ddd; }
 div.top-row { clear: both; display: block; padding-bottom: 40px; }
