@@ -52,7 +52,7 @@ class Product(models.Model):
     serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(verbose_name='opis usterki')
-    additional_info = models.TextField(verbose_name='informacje dodatkowe')
+    additional_info = models.TextField(verbose_name='informacje dodatkowe', blank=True)
     status = models.CharField(choices=STATUS_CHOICES, max_length=32)
     parcel_number = models.CharField(max_length=64, blank=True, verbose_name='numer przesyłki')
     external_service_name = models.CharField(max_length=128, blank=True, verbose_name='nazwa serwisu zewnętrznego')
