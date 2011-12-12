@@ -141,5 +141,7 @@ LOGGING = {
         },
     }
 }
+SESSION_COOKIE_AGE = 60 * 10
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = '/zaloguj/'

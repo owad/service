@@ -13,6 +13,8 @@ ul.errorlist { color: #333; width: 200px; float: right; margin: 0px; list-style-
 .right { text-align: right; }
 .row1 { background-color: #eee; }
 .row2 { background-color: #ddd; }
+.subscriber { background-color: #99f; }
+.subscriber-color { color: #00d; }
 div.top-row { clear: both; display: block; padding-bottom: 40px; }
 div.content { font-size: 14px; clear: both; }
 div.login-form {

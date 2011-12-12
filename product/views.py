@@ -64,7 +64,7 @@ class ProductListView(ListView):
         else:
             if 'status' in self.kwargs:
                 if self.kwargs['status'] == 'moje':
-                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS).values_list('product_id', flat=True)
+                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
                     return Product.objects.filter(id__in=product_ids)
                 elif self.kwargs['status'] == 'przeterminowane':
                     return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=3),
@@ -72,7 +72,7 @@ class ProductListView(ListView):
                                                   Q(updated__lte=datetime.now() - timedelta(days=10),
                                                     status=Product.EXTERNAL))
                 elif self.kwargs['status'] == 'moje_przeterminowane':
-                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS).values_list('product_id', flat=True)
+                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
                     return Product.objects.filter(id__in=product_ids).\
                                                   filter(Q(updated__lte=datetime.now() - timedelta(days=3),
                                                     status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
@@ -173,7 +173,7 @@ class CommentDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         id = self.object.product.id
-        if request.user.is_staff:
+        if (request.user.is_staff and self.object.type == self.object.HARDWARE_ADD) or (request.user.is_superadmin):
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url(id))
     

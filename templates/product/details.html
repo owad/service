@@ -3,7 +3,7 @@
 {% block title %} {{ block.super }} - {{ product }} {% endblock %}
 {% block content %} 
 {% block content-header %}
-    <h2>Dane zgłoszenia {{ product.get_signature }}</h2>
+    <h2>Dane zgłoszenia {{ product.get_signature }} ({{ product.get_owner }})</h2>
     {% endblock %}
 <div class="product-details">
     <div class="product-data">
@@ -14,7 +14,7 @@
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
             <tr><th>Przewidywany koszt naprawy do</th><td>{{ product.max_cost|pln }}</td></tr>
-            <tr><th>Koszt naprawy:</th><td>{{ product.get_cost|pln }}</td></tr>
+            <tr><th>Koszt naprawy:</th><td>{{ product.get_cost|pln }} {{ product.get_cost_totals }}</td></tr>
             <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
             {% if product.courier > 0 %}
             <tr><th>Kurier</th><td>{{ courier }}</td></tr>
@@ -33,7 +33,7 @@
             <div>{{ product.client.get_phone_numbers }}</div>
             <div class="product-add-link">
                 <a href="{% url client-edit product.client.id %}">edycja danych klienta</a>
-                <a href="{% url client-details product.client.id %}">List zgłoszeń</a>
+                <a href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
             </div>
     </div>
     <div class="clearBoth"></div>
@@ -49,7 +49,7 @@
         <tr>
             <th class="left">Notatka</th>
             <th>Koszt sprzętu</th>
-            <th>Koszt usułgi</th>
+            <th>Koszt usługi</th>
             <th>Koszt dojazdu</th>
             <th>Status</th>
             <th>Data</th>
@@ -64,7 +64,7 @@
             <td class="center">{{ comment.get_status_name }}</td>
             <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
             <td class="center">
-                {% if user.is_staff and comment.hardware > 0 %}
+                {% if user.is_staff and comment.type == comment.HARDWARE_ADD or user.is_superuser %}
                 <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
                 <script type="text/javascript">
                     $("#delete-comment" + {{ comment.id }}).fancybox();

@@ -14,7 +14,7 @@
         <th></th>
     </tr>
     {% for product in product_list %}
-    <tr class="{% cycle 'row1' 'row2' %}" 
+    <tr class="{% cycle 'row1' 'row2' %} {% if product.client.is_subscriber %}subscriber-color{% endif %}" 
         {% if product.get_alert %} style="background-color: {{ product.get_alert }};" {% endif %} 
         onclick="window.location.href='{% url product-details product.id %}'">
         <td>{{ product.id }}</td>
@@ -27,7 +27,7 @@
         <td class="center">{{ product.get_status_name }}</td>
         <td>{{ product.client.phone_number|default:"-" }}</td>
         <td class="center">{{ product.created }}</td>
-        <td class="center">{{ product.updated }}</td>
+        <td class="center">{{ product.get_owner }}</td>
     </tr>
     {% empty %}
     <tr>

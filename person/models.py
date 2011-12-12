@@ -28,6 +28,7 @@ class Client(models.Model):
     email = models.EmailField(blank=True, verbose_name='e-mail')
     phone_number = models.CharField(max_length=9, verbose_name='telefon', validators=[RegexValidator('^(\d{9})$')])
     second_phone_number = models.CharField(max_length=9, verbose_name='telefon dodatkowy', validators=[RegexValidator('^(\d{9})$')], blank=True)
+    is_subscriber = models.BooleanField(default=False, verbose_name='abonament serwisowy')
     created = models.DateTimeField(auto_now_add=True, verbose_name='data utworzenia')
 
     class Meta:

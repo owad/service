@@ -52,6 +52,7 @@ class Product(models.Model):
     serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(verbose_name='opis usterki')
+    additional_info = models.TextField(verbose_name='informacje dodatkowe')
     status = models.CharField(choices=STATUS_CHOICES, max_length=32)
     parcel_number = models.CharField(max_length=64, blank=True, verbose_name='numer przesyłki')
     external_service_name = models.CharField(max_length=128, blank=True, verbose_name='nazwa serwisu zewnętrznego')
@@ -127,6 +128,18 @@ class Product(models.Model):
     def get_cost(self):
         return self.get_hardware_cost() + self.get_software_cost() + self.get_transport_cost()
     
+    def get_cost_totals(self):
+        costs = []
+        if self.get_hardware_cost():
+            costs.append('sprzęt: %szł' % (self.get_hardware_cost(),))
+        if self.get_software_cost():
+            costs.append('usługa: %szł' % (self.get_software_cost(),))
+        if self.get_transport_cost():
+            costs.append('dojazd: %szł' % (self.get_transport_cost(),))
+        if costs:
+            return '(' + ', '.join(costs) + ')'
+        return ''
+    
     def get_warranty_name(self):
         if self.warranty == self.N: 
             return self.N_NICE
@@ -152,7 +165,7 @@ class Product(models.Model):
 
     def get_alert(self):
         color = '';
-        if datetime.now() - timedelta(days=3) > self.updated \
+        if datetime.now() - timedelta(days=7) > self.updated \
             and self.status in (self.NEW, self.PROCESSING, self.COURIER, self.READY):
             color = '#ff3333'
         if datetime.now() - timedelta(days=10) > self.updated and self.status == self.EXTERNAL:
@@ -162,6 +175,10 @@ class Product(models.Model):
     def get_signature(self):
         return '/'.join([str(self.id), str(self.created.year)])
     
+    def get_owner(self):
+        comment = Comment.objects.filter(product=self, status=Product.PROCESSING, type=Comment.STATUS_CHANGE)[0]
+        return comment.user.get_full_name()
+        
     def __unicode__(self):
         return self.name
 

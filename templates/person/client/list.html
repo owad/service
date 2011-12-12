@@ -14,7 +14,7 @@
            <th></th>
         </tr>
         {% for client in client_list %}
-        <tr class="{% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url client-details client.id %}'">
+        <tr class="{% if client.is_subscriber %}subscriber{% endif %} {% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url client-details client.id %}'">
             <td>{{ client.id }}</td>
             <td>{{ client.first_name }}</td>
             <td>{{ client.last_name }}</td>

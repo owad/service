@@ -22,7 +22,7 @@
                 {% if user.is_authenticated %}
                 <div class="account-info">
                     <div>
-                        <span>użytkownik: {{ user.get_full_name }}</span>
+                        <span>zalogowany jako <span style="font-size: 16px; font-weight: bold;">{{ user.get_full_name }}</span></span>
                         {% if user.is_staff %}
                         <a href="{% url reports %}">RAPORTY</a>
                         <a target="_blank" href="/admin/">ADMIN</a>
