@@ -67,14 +67,14 @@ class ProductListView(ListView):
                     product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
                     return Product.objects.filter(id__in=product_ids)
                 elif self.kwargs['status'] == 'przeterminowane':
-                    return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=3),
+                    return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=7),
                                                     status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
                                                   Q(updated__lte=datetime.now() - timedelta(days=10),
                                                     status=Product.EXTERNAL))
                 elif self.kwargs['status'] == 'moje_przeterminowane':
                     product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
                     return Product.objects.filter(id__in=product_ids).\
-                                                  filter(Q(updated__lte=datetime.now() - timedelta(days=3),
+                                                  filter(Q(updated__lte=datetime.now() - timedelta(days=7),
                                                     status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
                                                   Q(updated__lte=datetime.now() - timedelta(days=10),
                                                     status=Product.EXTERNAL))
