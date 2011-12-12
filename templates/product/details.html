@@ -12,7 +12,7 @@
             <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
             <tr><th>Notatka: </th><td>{{ product.description|default:"-" }}</td></tr>
             <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
-            <tr><th>Informacje dodatkowe: </th><td>{{ product.additional_info }}</td></tr>
+            <tr><th>Informacje dodatkowe: </th><td>{{ product.additional_info|default:"-" }}</td></tr>
             <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
             <tr><th>Przewidywany koszt naprawy do</th><td>{{ product.max_cost|pln }}</td></tr>
             <tr><th>Koszt naprawy:</th><td>{{ product.get_cost|pln }} {{ product.get_cost_totals }}</td></tr>
