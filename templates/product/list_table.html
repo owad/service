@@ -11,7 +11,7 @@
         <th>Status</th>
         <th class="left">Telefon klienta</th>
         <th>Data przyjęcia</th>
-        <th></th>
+        <th>Realizowane przez</th>
     </tr>
     {% for product in product_list %}
     <tr class="{% cycle 'row1' 'row2' %} {% if product.client.is_subscriber %}subscriber-color{% endif %}" 
