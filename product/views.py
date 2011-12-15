@@ -173,7 +173,7 @@ class CommentDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         id = self.object.product.id
-        if (request.user.is_staff and self.object.type == self.object.HARDWARE_ADD) or (request.user.is_superadmin):
+        if (request.user.is_staff and self.object.type == self.object.HARDWARE_ADD) or (request.user.is_superuser):
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url(id))
     

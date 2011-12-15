@@ -174,7 +174,7 @@ class Product(models.Model):
 
     def get_signature(self):
         return '/'.join([str(self.id), str(self.created.year)])
-    
+
     def get_owner(self):
         comments = Comment.objects.filter(product=self, status=Product.PROCESSING, type=Comment.STATUS_CHANGE)
         if comments.count() > 0:

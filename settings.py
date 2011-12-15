@@ -1,9 +1,7 @@
 # Django settings for service project.
 import os
+
 DEBUG = True
-
-from config import *
-
 TEMPLATE_DEBUG = DEBUG
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -14,6 +12,19 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'db.sqlite3',                      # Or path to database file if using sqlite3.
+        }
+    }
+    
+    STATIC_URL = '/static_media/'
+    SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
+else:
+    from live_settings import *
+    
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -52,14 +63,10 @@ MEDIA_URL = ''
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
 
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static_media/'
-
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/static_media/admin/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -76,9 +83,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
