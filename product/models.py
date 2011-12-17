@@ -5,6 +5,8 @@ from django.db.models import Sum, Count
 from datetime import datetime, timedelta
 
 from person.models import User, Client
+from settings import UPLOAD_URL
+
 
 class Courier(models.Model):
     
@@ -237,7 +239,7 @@ class Comment(models.Model):
 class File(models.Model):
 
     product = models.ForeignKey(Product, blank=True)
-    obj = models.FileField(upload_to="media_files/", verbose_name='plik', blank=True)
+    obj = models.FileField(upload_to=UPLOAD_URL, verbose_name='plik', blank=True)
     title = models.CharField(max_length=100, verbose_name='nazwa', blank=True)
 
     def get_file_name(self):

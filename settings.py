@@ -24,6 +24,7 @@ if DEBUG:
     
     STATIC_URL = '/static_media/'
     SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
+    UPLOAD_URL = 'media_files/'
 else:
     from live_settings import *
     
