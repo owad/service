@@ -3,9 +3,9 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.util import ErrorList
 from django.forms.widgets import HiddenInput, Select
-from django.forms import ChoiceField, CharField
+from django.forms import ChoiceField
 
-from product.models import Product, Comment, Courier
+from product.models import Product, Comment, Courier, File
 
 class ProductForm(ModelForm):
     class Meta:
@@ -64,4 +64,9 @@ class CourierCommentForm(CommentForm):
     
     courier = forms.ChoiceField(label="Kurier", choices=[(obj.id, obj) for obj in Courier.objects.all()])
     parcel_number = forms.CharField(label="Numer przesyłki", max_length=64)
-    
+
+
+class FileForm(ModelForm):
+    class Meta:
+        model = File
+        exclude = ('product', )

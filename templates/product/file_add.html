@@ -1,0 +1,11 @@
+<h3>Nowy załącznik</h3>
+<form action="{% url product-file-add product.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+	<table>
+	{{ form }}
+	<tr>
+	    <td></td>
+	    <td><button type="submit">Zapisz</button>
+	</tr>
+	</table>
+</form>

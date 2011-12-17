@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from django import template
 from django.template import loader, RequestContext
@@ -8,8 +8,8 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.db.models import Q
 
-from product.models import Product, Comment, Courier
-from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm
+from product.models import Product, Comment, Courier, File
+from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm, FileForm
 from person.models import Client
 
 from datetime import datetime, timedelta
@@ -166,7 +166,7 @@ class CommentAddView(CreateView):
         return reverse(self.success_url, kwargs={'pk': self.kwargs['product_id']})
 
 class CommentDeleteView(DeleteView):
-    template_view = "comment/delete.html"
+    template_name = "comment/delete.html"
     model = Comment
     success_url = 'product-details'
     
@@ -182,4 +182,34 @@ class CommentDeleteView(DeleteView):
     
     def get_success_url(self, id):
         return reverse(self.success_url, kwargs={'pk': id})
+
+
+class ProductFileAddView(CreateView):
+    template_name = 'product/file_add.html'
+    queryset = File.objects.all()
+    form_class = FileForm
+    success_url = 'product-details'
+    
+    def get_context_data(self, **kwargs):
+        context = CreateView.get_context_data(self, **kwargs)
+        context['product'] = get_object_or_404(Product, pk=self.kwargs['pk'])
+        return context
+    
+    def form_valid(self, form):
+        new_file = form.save(commit=False)
+        if new_file.obj:
+            new_file.product = self.get_context_data()['product']
+            new_file.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def get_success_url(self):
+        return reverse(self.success_url, kwargs={'pk': self.get_context_data()['product'].id})
+
+def get_file(request, product_id, pk):
+    f = get_object_or_404(File, pk=pk)
+    if int(f.product.id) != int(product_id):
+        return HttpResponseRedirect('/')
+    response = HttpResponse(f.obj.read())
+    response['Content-Disposition'] = 'attachment; filename=%s' % f.get_file_name()
+    return response
     

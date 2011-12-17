@@ -2,91 +2,96 @@
 {% load service_extras %}
 {% block title %} {{ block.super }} - {{ product }} {% endblock %}
 {% block content %} 
-{% block content-header %}
-    <h2 class="{% if product.client.is_subscriber %}subscriber-color{% endif %}">Dane zgłoszenia {{ product.get_signature }} ({{ product.get_owner }})</h2>
-    {% endblock %}
-<div class="product-details">
-    <div class="product-data">
-        <table>
-            <tr><th>Nazwa: </th><td>{{ product.name }}</td></tr>
-            <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
-            <tr><th>Notatka: </th><td>{{ product.description|default:"-" }}</td></tr>
-            <tr><th>Informacje dodatkowe: </th><td>{{ product.additional_info|default:"-" }}</td></tr>
-            <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
-            <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
-            <tr><th>Przewidywany koszt naprawy do</th><td>{{ product.max_cost|pln }}</td></tr>
-            <tr><th>Koszt naprawy:</th><td>{{ product.get_cost|pln }} {{ product.get_cost_totals }}</td></tr>
-            <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
-            {% if product.courier > 0 %}
-            <tr><th>Kurier</th><td>{{ courier }}</td></tr>
-            <tr><th>Numer przesyłki: </th><td>{{ product.parcel_number }}</td></tr>
-            {% endif %}
-        </table>
-    </div>
-    <div class="client-data">
-        <h3>Dane klienta</h3>
-            <div>{{ product.client.first_name }} {{ product.client.last_name }}</div>
-            <div>{{ product.client.company_name }}</div>
-            {% for line in product.client.get_address_lines %}
-            <div>{{ line }}</div>
-            {% endfor %}
-            <div>{{ product.client.email }}</div>
-            <div>{{ product.client.get_phone_numbers }}</div>
-            <div class="product-add-link">
-                <a href="{% url client-edit product.client.id %}">edycja danych klienta</a>
-                <a href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
-            </div>
-    </div>
-    <div class="clearBoth"></div>
-    {% if comment_list %}
-    <h2>Historia</h2>
-    <div class="return-link">
-        {% if product.status != product.CLOSED %}
-        <a id="ajax-comment-add-top" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
-        {% endif %}
-        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
-    </div>
-    <table class="comment-list">
-        <tr>
-            <th class="left">Notatka</th>
-            <th>Koszt sprzętu</th>
-            <th>Koszt usługi</th>
-            <th>Koszt dojazdu</th>
-            <th>Status</th>
-            <th>Data</th>
-            <th></th>
-        </tr>
-    {% for comment in product.comment_set.all %}
-        <tr style="background-color:#{% cycle 'eee' 'fff' %};">
-            <td>{{ comment.note }}</td>
-            <td class="center">{{ comment.hardware|pln }}</td>
-            <td class="center">{{ comment.software|pln }}</td>
-            <td class="center">{{ comment.transport|pln }}</td>
-            <td class="center">{{ comment.get_status_name }}</td>
-            <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
-            <td class="center">
-                {% if user.is_staff and comment.type == comment.HARDWARE_ADD or user.is_superuser %}
-                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
-                <script type="text/javascript">
-                    $("#delete-comment" + {{ comment.id }}).fancybox();
-                </script> 
-                {% endif %}
-            </td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="5">brak komentarzy</td>
-        </tr>
-    {% endfor %}
-    </table>
-    {% endif %}
-    
-    <div class="return-link">
-        {% if product.status != product.CLOSED %}
-        <a id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
-        {% endif %}
-        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
-    </div>
-    <div class="clearBoth"></div>
-</div>
+	{% block content-header %}
+	    <h2 class="{% if product.client.is_subscriber %}subscriber-color{% endif %}">Zgłoszenia {{ product.get_signature }} ({{ product.get_owner }})</h2>
+	{% endblock %}
+	<div class="product-details">
+	    <div class="product-data">
+	        <h3>Szczegóły zgłoszenia</h3>
+	        <table>
+	            <tr><th>Nazwa: </th><td>{{ product.name }}</td></tr>
+	            <tr><th>Producent: </th><td>{{ product.producent|default:"-" }}</td></tr>
+	            <tr><th>Notatka: </th><td>{{ product.description|default:"-" }}</td></tr>
+	            <tr><th>Informacje dodatkowe: </th><td>{{ product.additional_info|default:"-" }}</td></tr>
+	            <tr><th>Numer seryjny: </th><td>{{ product.serial|default:"-" }}</td></tr>
+	            <tr><th>Gwarancja</th><td>{{ product.get_warranty_name }}</td></tr>
+	            <tr><th>Przewidywany koszt naprawy do</th><td>{{ product.max_cost|pln }}</td></tr>
+	            <tr><th>Koszt naprawy:</th><td>{{ product.get_cost|pln }} {{ product.get_cost_totals }}</td></tr>
+	            <tr><th>Status: </th><td>{{ product.get_status_name }}</td></tr>
+	            {% if product.courier > 0 %}
+	            <tr><th>Kurier</th><td>{{ courier }}</td></tr>
+	            <tr><th>Numer przesyłki: </th><td>{{ product.parcel_number }}</td></tr>
+	            {% endif %}
+	        </table>
+	    </div>
+	    <div class="client-data">
+	        <h3>Dane klienta</h3>
+	            <div>{{ product.client.first_name }} {{ product.client.last_name }}</div>
+	            <div>{{ product.client.company_name }}</div>
+	            {% for line in product.client.get_address_lines %}
+	            <div>{{ line }}</div>
+	            {% endfor %}
+	            <div>{{ product.client.email }}</div>
+	            <div>{{ product.client.get_phone_numbers }}</div>
+	            <div class="product-add-link">
+	                <a href="{% url client-edit product.client.id %}">edycja danych</a>
+	                <br/>
+	                <a href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
+	            </div>
+	    </div>
+	    <div class="product-files">
+	       {% include "product/file_list.html" with product=product %}
+	    </div>
+	    <div class="clearBoth"></div>
+	    {% if comment_list %}
+	    <h2>Historia</h2>
+	    <div class="return-link">
+	        {% if product.status != product.CLOSED %}
+	        <a id="ajax-comment-add-top" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+	        {% endif %}
+	        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+	    </div>
+	    <table class="comment-list">
+	        <tr>
+	            <th class="left">Notatka</th>
+	            <th>Koszt sprzętu</th>
+	            <th>Koszt usługi</th>
+	            <th>Koszt dojazdu</th>
+	            <th>Status</th>
+	            <th>Data</th>
+	            <th></th>
+	        </tr>
+	    {% for comment in product.comment_set.all %}
+	        <tr style="background-color:#{% cycle 'eee' 'fff' %};">
+	            <td>{{ comment.note }}</td>
+	            <td class="center">{{ comment.hardware|pln }}</td>
+	            <td class="center">{{ comment.software|pln }}</td>
+	            <td class="center">{{ comment.transport|pln }}</td>
+	            <td class="center">{{ comment.get_status_name }}</td>
+	            <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
+	            <td class="center">
+	                {% if user.is_staff and comment.type == comment.HARDWARE_ADD or user.is_superuser %}
+	                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
+	                <script type="text/javascript">
+	                    $("#delete-comment" + {{ comment.id }}).fancybox();
+	                </script> 
+	                {% endif %}
+	            </td>
+	        </tr>
+	    {% empty %}
+	        <tr>
+	            <td colspan="5">brak komentarzy</td>
+	        </tr>
+	    {% endfor %}
+	    </table>
+	    {% endif %}
+	    
+	    <div class="return-link">
+	        {% if product.status != product.CLOSED %}
+	        <a id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+	        {% endif %}
+	        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+	    </div>
+	    <div class="clearBoth"></div>
+	</div>
 {% endblock %}

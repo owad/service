@@ -1,0 +1,17 @@
+<h3>Załączone pliki</h3>
+<ul>
+{% for file in product.file_set.all %}
+<li><a href="{% url product-get-file file.product.id file.id %}">{{ file  }}</a></li>
+{% empty %}
+<li>brak załączników</li>
+{% endfor %}
+</ul>
+<br/>
+<div class="product-add-link">
+    <a id="product-file-add" href="{% url product-file-add product.id %}">załącz plik</a>
+</div>
+
+
+<script type="text/javascript">
+$("#product-file-add").fancybox();
+</script>

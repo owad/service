@@ -232,3 +232,19 @@ class Comment(models.Model):
     
     def __unicode__(self):
         return self.note
+
+
+class File(models.Model):
+
+    product = models.ForeignKey(Product, blank=True)
+    obj = models.FileField(upload_to="media_files/", verbose_name='plik', blank=True)
+    title = models.CharField(max_length=100, verbose_name='nazwa', blank=True)
+
+    def get_file_name(self):
+        return self.obj.path.split('/')[-1]
+
+    def __unicode__(self):
+        if self.title:
+            return self.title
+        else:
+            return self.get_file_name()
