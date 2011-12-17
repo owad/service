@@ -1,7 +1,7 @@
 <h3>Załączone pliki</h3>
 <ul>
 {% for file in product.file_set.all %}
-<li><a href="{% url product-get-file file.product.id file.id %}">{{ file  }}</a></li>
+<li><a href="{% url product-get-file file.product.id file.id %}">{{ file  }}</a> <a href="{% url product-delete-file file.product.id file.id %}">usuń</a></li>
 {% empty %}
 <li>brak załączników</li>
 {% endfor %}

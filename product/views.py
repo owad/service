@@ -1,4 +1,7 @@
+import logging
+
 from django.views.generic import ListView, DetailView
+from django.views.generic.base import RedirectView
 from django.views.generic.edit import CreateView, DeleteView
 from django import template
 from django.template import loader, RequestContext
@@ -212,4 +215,16 @@ def get_file(request, product_id, pk):
     response = HttpResponse(f.obj.read())
     response['Content-Disposition'] = 'attachment; filename=%s_%s.%s' % (f.product.id, f.id, f.get_extension())
     return response
+
+class ProductFileDeleteView(RedirectView):
     
+    def get(self, request, *args, **kwargs):
+        try:
+            f = File.objects.get(pk=self.kwargs['pk'])
+            f.delete()
+        except:
+            pass
+        return RedirectView.get(self, request, *args, **kwargs)
+
+    def get_redirect_url(self, **kwargs):
+        return reverse('product-details', kwargs={'pk': self.kwargs['product_id']})
