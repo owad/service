@@ -210,6 +210,6 @@ def get_file(request, product_id, pk):
     if int(f.product.id) != int(product_id):
         return HttpResponseRedirect('/')
     response = HttpResponse(f.obj.read())
-    response['Content-Disposition'] = 'attachment; filename=%s' % f.get_file_name()
+    response['Content-Disposition'] = 'attachment; filename=%s_%s.%s' % (f.product.id, f.id, f.get_extension())
     return response
     

@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from person.models import User, Client
 from settings import UPLOAD_URL
 
+from django.template import defaultfilters
+
 
 class Courier(models.Model):
     
@@ -243,7 +245,18 @@ class File(models.Model):
     title = models.CharField(max_length=100, verbose_name='nazwa', blank=True)
 
     def get_file_name(self):
-        return self.obj.path.split('/')[-1]
+        chunks = self.obj.path.split('/')
+        if chunks:
+            return chunks[-1]
+        else:
+            return self.id
+
+    def get_extension(self):
+        chunks = self.obj.path.split('.')
+        if chunks:
+            return chunks[-1]
+        else:
+            return 'unknown'
 
     def __unicode__(self):
         if self.title:

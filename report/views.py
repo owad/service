@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.db.models import Q
 from django.db.models import Sum
 import datetime
@@ -8,8 +9,10 @@ import datetime
 from product.models import Product, Comment
 from report.forms import ReportForm
 
-class ReportView(TemplateView):
+class ReportView(FormView):
     template_name = 'reports/main.html'
+    
+    form_class = ReportForm
     _form = None
     _report_data = None
     _comments = None
