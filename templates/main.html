@@ -25,6 +25,8 @@
                         <span>zalogowany jako <span class="full_name">{{ user.get_full_name }}</span></span>
                         {% if user.is_staff %}
                         <a href="{% url reports %}">RAPORTY</a>
+                        {% endif %}
+                        {% if user.is_superuser %}
                         <a target="_blank" href="/admin/">ADMIN</a>
                         {% endif %}
                         <a href="{% url logout %}">WYLOGUJ</a>

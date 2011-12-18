@@ -5,9 +5,9 @@
     {% block content-header %}
     <h2>Raport</h2>
     {% endblock %}
-    <form action="" method="post">{% csrf_token %}
+    <form action="" method="get">{% csrf_token %}
         <table class="report">
-        {{ report_form.as_table }}
+        {{ form.as_table }}
         <tr>
             <th></th>
             <td><input type="submit" value="generuj raport" /></td>
@@ -18,19 +18,32 @@
     {% if report %}
     <h2>Wynik</h2>
     <table>
-        <tr>
+        <tr class="row1">
             <th>Koszt sprzętu</th>
             <th>Koszt usług</th>
             <th>Koszt dojazdów</th>
             <th>Koszt całkowity</th>
         </tr>
-        <tr>
+        <tr class="row2">
             <td class="center">{{ report.hard|pln }}</td>
             <td class="center">{{ report.soft|pln }}</td>
             <td class="center">{{ report.tran|pln }}</td>
             <td class="center">{{ report.sum|pln }}</td>
         </tr>
     </table>
+    
+    <h2>Lista zgłoszeń</h2>
+    {% include 'reports/list_table.html' with product_list=object_list %}
     {% endif %}
     
+    <script type="text/javascript">
+    $('#id_all_users').click(function() {
+    	if (this.checked) {
+    		$('input[name=user]').attr('checked', 'checked') }
+    	else {
+    		$('input[name=user]').removeAttr('checked');
+    	}
+    })
+    
+    </script>
 {% endblock %}

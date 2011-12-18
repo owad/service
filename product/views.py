@@ -15,6 +15,8 @@ from product.models import Product, Comment, Courier, File
 from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm, FileForm
 from person.models import Client
 
+from settings import PRODUCTS_PER_PAGE
+
 from datetime import datetime, timedelta
 
 register = template.Library()
@@ -48,7 +50,7 @@ class ProductListView(ListView):
     context_object_name = "product_list"
     queryset = None
     template_name = 'product/list.html'
-    paginate_by = 20
+    paginate_by = PRODUCTS_PER_PAGE
     
     def get(self, request, *args, **kwargs):
         if self.get_queryset().count() == 1 and self.get_search_query():

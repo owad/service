@@ -1,7 +1,6 @@
 # -* - coding: utf-8 -*-
 from django import forms
-from django.forms import ModelForm
-from django.forms.widgets import CheckboxSelectMultiple, SelectMultiple
+from django.forms.widgets import CheckboxSelectMultiple
 from django.forms.extras.widgets import SelectDateWidget
 import datetime
 
@@ -19,4 +18,5 @@ class ReportForm(forms.Form):
     start_date = forms.DateField(widget=SelectDateWidget(years=years), initial=startdate, label='data początkowa')
     end_date = forms.DateField(widget=SelectDateWidget(years=years), initial=enddate, label='data końcowa')
     warranty = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=Product.WARRANTY_CHOICES, label='gwarancja')
-    user = forms.MultipleChoiceField(widget=SelectMultiple(), choices=userModel.get_user_choices(), label='pracownik')
+    user = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=userModel.get_user_choices(), label='pracownik')
+    all_users = forms.BooleanField(label='wszyscy', required=False)

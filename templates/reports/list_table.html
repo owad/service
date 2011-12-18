@@ -1,0 +1,27 @@
+{% load service_extras %}
+<table class="product-list">
+    <tr>
+        <th class="left">ID</th>
+        <th class="left">Klient</th>
+        <th>Gwarancja</th>
+        <th>Do zapłaty</th>
+        <th>Data przyjęcia</th>
+        <th>Zrealizowane przez</th>
+    </tr>
+    {% for product in product_list %}
+    <tr class="{% cycle 'row1' 'row2' %} {% if product.client.is_subscriber %}subscriber-color{% endif %}" 
+        {% if product.get_alert %} style="background-color: {{ product.get_alert }};" {% endif %} 
+        onclick="window.location.href='{% url product-details product.id %}'">
+        <td>{{ product.id }}</td>
+        <td>{{ product.client }}</td>
+        <td class="center">{{ product.get_warranty_name }}</td>
+        <td class="center">{{ product.get_cost|pln }} {{ product.get_cost_totals }}</td>
+        <td class="center">{{ product.created }}</td>
+        <td class="center">{{ product.get_owner }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <th colspan="9" class="center"><h3>Brak zgłoszeń</h3></th>
+    </tr>
+    {% endfor %}
+</table>
