@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 
 register = template.Library()
 
+
 class ProductDetailView(CreateView):
     template_name = 'product/details.html'
     queryset = Product.objects.all()
@@ -41,12 +42,18 @@ class ProductDetailView(CreateView):
         init['product'] = self.get_context_data()['product']
         init['user'] = self.request.user
         return init
-    
+
+
 class ProductListView(ListView):
     context_object_name = "product_list"
     queryset = None
     template_name = 'product/list.html'
     paginate_by = 20
+    
+    def get(self, request, *args, **kwargs):
+        if self.get_queryset().count() == 1 and self.get_search_query():
+            return HttpResponseRedirect(reverse('product-details', kwargs={'pk': self.get_queryset()[0].id}))
+        return ListView.get(self, request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
@@ -64,33 +71,20 @@ class ProductListView(ListView):
                                               Q(producent__icontains=q)|
                                               Q(serial__icontains=q)|
                                               Q(parcel_number__icontains=q)).filter(status__in=Product.IN_PROGRESS)
+        return Product.objects.get_by_status_and_user(self.get_status(), self.request.user)
+    
+    def get_status(self):
+        if 'status' in self.kwargs:
+            return self.kwargs['status']
         else:
-            if 'status' in self.kwargs:
-                if self.kwargs['status'] == 'moje':
-                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
-                    return Product.objects.filter(id__in=product_ids)
-                elif self.kwargs['status'] == 'przeterminowane':
-                    return Product.objects.filter(Q(updated__lte=datetime.now() - timedelta(days=7),
-                                                    status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
-                                                  Q(updated__lte=datetime.now() - timedelta(days=10),
-                                                    status=Product.EXTERNAL))
-                elif self.kwargs['status'] == 'moje_przeterminowane':
-                    product_ids = Comment.objects.filter(user=self.request.user, status__in=Product.IN_PROGRESS, type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
-                    return Product.objects.filter(id__in=product_ids).\
-                                                  filter(Q(updated__lte=datetime.now() - timedelta(days=7),
-                                                    status__in=(Product.NEW, Product.PROCESSING, Product.COURIER, Product.READY))|
-                                                  Q(updated__lte=datetime.now() - timedelta(days=10),
-                                                    status=Product.EXTERNAL))
-                elif self.kwargs['status'] in Product.STATUSES:
-                    return Product.objects.all().filter(status__exact=self.kwargs['status'])
-            else:
-                return Product.objects.all()
+            return ''
     
     def get_search_query(self):
         q = None
         if 'q' in self.request.GET and self.request.GET['q']:
             q = self.request.GET['q'].strip()
         return q
+
 
 class ProductAddView(CreateView):
     template_name = 'product/add.html'
@@ -112,7 +106,8 @@ class ProductAddView(CreateView):
     
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'pk': self.object.id})
-    
+
+
 class CommentAddView(CreateView):
     template_name = "comment/add.html"
     form_class = CommentForm
@@ -168,6 +163,7 @@ class CommentAddView(CreateView):
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'pk': self.kwargs['product_id']})
 
+
 class CommentDeleteView(DeleteView):
     template_name = "comment/delete.html"
     model = Comment
@@ -215,6 +211,7 @@ def get_file(request, product_id, pk):
     response = HttpResponse(f.obj.read())
     response['Content-Disposition'] = 'attachment; filename=%s_%s.%s' % (f.product.id, f.id, f.get_extension())
     return response
+
 
 class ProductFileDeleteView(DeleteView):
     template_name = 'product/file_delete.html'
