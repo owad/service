@@ -216,15 +216,10 @@ def get_file(request, product_id, pk):
     response['Content-Disposition'] = 'attachment; filename=%s_%s.%s' % (f.product.id, f.id, f.get_extension())
     return response
 
-class ProductFileDeleteView(RedirectView):
+class ProductFileDeleteView(DeleteView):
+    template_name = 'product/file_delete.html'
+    queryset = File.objects.all()
+    success_url = 'product-details'
     
-    def get(self, request, *args, **kwargs):
-        try:
-            f = File.objects.get(pk=self.kwargs['pk'])
-            f.delete()
-        except:
-            pass
-        return RedirectView.get(self, request, *args, **kwargs)
-
-    def get_redirect_url(self, **kwargs):
-        return reverse('product-details', kwargs={'pk': self.kwargs['product_id']})
+    def get_success_url(self):
+        return reverse(self.success_url, kwargs={'pk': self.kwargs['product_id']})
