@@ -58,8 +58,9 @@ class ReportView(ListView):
             data = Comment.objects.filter(product__in=self.get_queryset()).aggregate(soft=Sum('software'), hard=Sum('hardware'), tran=Sum('transport'))
             total = 0.00
             for key, value in data.items():
-                total += float(value)
-                data[key] = float(value)
+                val = float(value) if value is not None else 0.00
+                data[key] = val
+                total += val
             data['sum'] = total
             return data
         return None
