@@ -33,13 +33,28 @@ class OutdatedManager(models.Manager):
             else:
                 return Product.objects.all()
 
-    def get_closed(self):
-        from models import Comment, Product
-        product_ids = Comment.objects.filter(status__in=(Product.CLOSED, Product.READY), type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
-        return Product.objects.filter(id__in=product_ids, status=Product.CLOSED)
-
-
-    def get_ready(self):
-        from models import Comment, Product
-        product_ids = Comment.objects.filter(status__in=(Product.CLOSED, Product.READY), type=Comment.STATUS_CHANGE).values_list('product_id', flat=True)
-        return Product.objects.filter(id__in=product_ids, status=Product.READY)
+    def get_for_report(self, get_data):
+        from models import Comment, Product, User
+        
+        if get_data:
+            date_pattern = '%Y-%m-%d %H:%M:%S'
+            startdate = datetime.strptime('%s-%s-%s 00:00:00' % (get_data['start_date_year'], get_data['start_date_month'], get_data['start_date_day']), date_pattern)
+            enddate = datetime.strptime('%s-%s-%s 23:59:59' % (get_data['end_date_year'], get_data['end_date_month'], get_data['end_date_day']), date_pattern)
+            
+            users = User.objects.filter(pk__in=get_data.getlist('user'))
+            
+            # get all products owned by provided users
+            owned_products = Comment.objects.filter(status=Product.PROCESSING,
+                                                 type=Comment.STATUS_CHANGE,
+                                                 user__in=users
+                                                 ).values_list('product_id', flat=True)
+            # get products finished and closed during provided dates
+            closed_products = Comment.objects.filter(status=Product.CLOSED,
+                                                 type=Comment.STATUS_CHANGE,
+                                                 created__range=(startdate, enddate)).values_list('product_id', flat=True)
+            
+            # getting proper products for reports
+            product_ids = set(owned_products) & set(closed_products)
+            # filtering by warranty flag
+            return Product.objects.filter(id__in=product_ids, warranty__in=get_data.getlist('warranty'))
+        return []

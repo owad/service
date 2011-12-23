@@ -39,18 +39,7 @@ class ReportView(ListView):
         return context
 
     def get_queryset(self):
-        queryset = Product.objects.get_closed()
-        return self.apply_form_data(queryset)
-
-    def apply_form_data(self, product_queryset):
-        date_pattern = '%Y-%m-%d %H:%M:%S'
-        get = self.request.GET
-        if get:
-            startdate = datetime.strptime('%s-%s-%s 00:00:00' % (get['start_date_year'], get['start_date_month'], get['start_date_day']), date_pattern)
-            enddate = datetime.strptime('%s-%s-%s 23:59:59' % (get['end_date_year'], get['end_date_month'], get['end_date_day']), date_pattern)
-            return product_queryset.filter(Q(created__gte=startdate) & Q(created__lte=enddate)
-                                           & Q(warranty__in=get.getlist('warranty')) & Q(user__in=get.getlist('user')))
-        return product_queryset
+        return Product.objects.get_for_report(self.request.GET)
 
     def get_report_sum(self):
         if self.request.GET:

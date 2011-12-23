@@ -193,6 +193,39 @@ class Product(models.Model):
         except:
             return '-'
 
+    def get_processing_date(self):
+        return self.get_by_comment_status(Product.PROCESSING)
+
+    def get_ready_date(self):
+        return self.get_by_comment_status(Product.READY)
+
+    def get_out_date(self):
+        return self.get_by_comment_status(Product.CLOSED)
+
+    def get_processing_user(self):
+        try:
+            return self.get_by_comment_status(Product.PROCESSING, 'user').get_full_name()
+        except:
+            return '-'
+
+    def get_ready_user(self):
+        try:
+            return self.get_by_comment_status(Product.READY, 'user').get_full_name()
+        except:
+            return '-'
+
+    def get_out_user(self):
+        try:
+            return self.get_by_comment_status(Product.CLOSED, 'user').get_full_name()
+        except:
+            return '-'
+
+    def get_by_comment_status(self, status_value, field='created'):
+        try:
+            return getattr(Comment.objects.get(product=self, status=status_value, type=Comment.STATUS_CHANGE), field)
+        except:
+            return '-'
+
     def __unicode__(self):
         return self.name
 

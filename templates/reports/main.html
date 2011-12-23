@@ -19,12 +19,14 @@
     <h2>Wynik</h2>
     <table>
         <tr class="row1">
+            <th>Ilość zgłoszeń</th>
             <th>Koszt sprzętu</th>
             <th>Koszt usług</th>
             <th>Koszt dojazdów</th>
             <th>Koszt całkowity</th>
         </tr>
         <tr class="row2">
+            <td class="center">{{ object_list.count }}</td>
             <td class="center">{{ report.hard|pln }}</td>
             <td class="center">{{ report.soft|pln }}</td>
             <td class="center">{{ report.tran|pln }}</td>
