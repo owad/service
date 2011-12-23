@@ -70,10 +70,14 @@
 	            <td class="center">{{ comment.created }} przez {{ comment.user }}</td>
 	            <td class="center">
 	                {% if user.is_staff and comment.type == comment.HARDWARE_ADD or user.is_superuser %}
-	                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
-	                <script type="text/javascript">
-	                    $("#delete-comment" + {{ comment.id }}).fancybox();
-	                </script> 
+		                {% if comment.type != comment.STATUS_CHANGE %}
+		                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
+		                <script type="text/javascript">
+		                    $("#delete-comment" + {{ comment.id }}).fancybox();
+		                </script> 
+		                {% else %}
+		                [edytuj]
+		                {% endif %}
 	                {% endif %}
 	            </td>
 	        </tr>

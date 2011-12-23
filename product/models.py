@@ -186,11 +186,13 @@ class Product(models.Model):
         return '/'.join([str(self.id), str(self.created.year)])
 
     def get_owner(self):
-        comments = Comment.objects.filter(product=self, status=Product.PROCESSING, type=Comment.STATUS_CHANGE)
-        if comments.count() > 0:
-            return comments[0].user.get_full_name()
-        return '-'
-        
+        try:
+            return Comment.objects.filter(product=self,
+                                          status=Product.PROCESSING,
+                                          type=Comment.STATUS_CHANGE)[0].user.get_full_name()
+        except:
+            return '-'
+
     def __unicode__(self):
         return self.name
 
