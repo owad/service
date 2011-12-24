@@ -60,6 +60,10 @@
                 $('#id_client').val('');
             }
         })
+        $('#id_client_autocomplete').dblclick(function() {
+            $('#id_client').val('');
+            $('#id_client_autocomplete').val('');
+        })
     });
     </script>
 {% endblock %}
