@@ -86,5 +86,9 @@ class ClientAjaxSearch(TemplateView):
                                         Q(phone_number__icontains=q))
         data = []
         for client in clients:
-            data.append({'id': client.id, 'label': str(client)})
+            if client.city:
+                label = '%s (%s)' % (str(client), str(client.city).strip())
+            else:
+                label = str(client)
+            data.append({'id': client.id, 'label': label})
         return HttpResponse(simplejson.dumps(data))
