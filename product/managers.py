@@ -37,9 +37,9 @@ class OutdatedManager(models.Manager):
         from models import Comment, Product, User
         
         if get_data:
-            date_pattern = '%Y-%m-%d %H:%M:%S'
-            startdate = datetime.strptime('%s-%s-%s 00:00:00' % (get_data['start_date_year'], get_data['start_date_month'], get_data['start_date_day']), date_pattern)
-            enddate = datetime.strptime('%s-%s-%s 23:59:59' % (get_data['end_date_year'], get_data['end_date_month'], get_data['end_date_day']), date_pattern)
+            date_pattern = '%d.%m.%Y %H:%M:%S'
+            startdate = datetime.strptime('%s 00:00:00' % (get_data['start_date']), date_pattern)
+            enddate = datetime.strptime('%s 23:59:59' % (get_data['end_date']), date_pattern)
             
             users = User.objects.filter(pk__in=get_data.getlist('user'))
             
