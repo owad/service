@@ -46,6 +46,20 @@
     		$('input[name=user]').removeAttr('checked');
     	}
     })
-    
+
+    $(function() {
+        $('#id_client_autocomplete').autocomplete({
+            source: "{% url client-search %}",
+            minLength: 2,
+            select: function( event, ui ) {
+                $('#id_client').val(ui.item.id);
+            }
+        });
+        $('#id_client_autocomplete').keyup(function() {
+            if ($(this).val().trim() == '') {
+                $('#id_client').val('');
+            }
+        })
+    });
     </script>
 {% endblock %}

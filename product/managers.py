@@ -56,5 +56,7 @@ class OutdatedManager(models.Manager):
             # getting proper products for reports
             product_ids = set(owned_products) & set(closed_products)
             # filtering by warranty flag
+            if get_data.get('client'):
+                return Product.objects.filter(id__in=product_ids, warranty__in=get_data.getlist('warranty'), client=get_data.get('client'))
             return Product.objects.filter(id__in=product_ids, warranty__in=get_data.getlist('warranty'))
         return []

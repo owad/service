@@ -1,7 +1,6 @@
 # -* - coding: utf-8 -*-
 from django import forms
-from django.forms.widgets import CheckboxSelectMultiple, TextInput
-from django.forms.extras.widgets import SelectDateWidget
+from django.forms.widgets import CheckboxSelectMultiple, TextInput, HiddenInput
 import datetime
 
 from person.models import User
@@ -18,5 +17,7 @@ class ReportForm(forms.Form):
     start_date = forms.DateField(widget=TextInput(attrs={'class': 'datepicker'}), initial=startdate, label='data początkowa')
     end_date = forms.DateField(widget=TextInput(attrs={'class': 'datepicker'}), initial=enddate, label='data końcowa')
     warranty = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=Product.WARRANTY_CHOICES, label='gwarancja')
+    client_autocomplete = forms.CharField(label="klient", required=False)
+    client = forms.CharField(widget=HiddenInput(), required=False)
     user = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=userModel.get_user_choices(), label='pracownik')
     all_users = forms.BooleanField(label='wszyscy', required=False)
