@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
@@ -7,6 +8,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
+from django.utils.encoding import smart_str
 
 from person.models import Client
 from person.forms import ClientForm
@@ -86,9 +88,8 @@ class ClientAjaxSearch(TemplateView):
                                         Q(phone_number__icontains=q))
         data = []
         for client in clients:
+            label = str(client)
             if client.city:
-                label = '%s (%s)' % (str(client), str(client.city).strip())
-            else:
-                label = str(client)
+                label = '%s (%s)' % (str(client), smart_str(client.city).strip())
             data.append({'id': client.id, 'label': label})
         return HttpResponse(simplejson.dumps(data))
