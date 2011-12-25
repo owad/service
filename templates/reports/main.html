@@ -38,6 +38,10 @@
     {% include 'reports/list_table.html' with product_list=object_list %}
     {% endif %}
     
+    <style>
+    .ui-autocomplete-loading { background: white url('{{ STATIC_URL }}images/ui-anim_basic_16x16.gif') right center no-repeat; }
+    </style>
+    
     <script type="text/javascript">
     $('#id_all_users').click(function() {
     	if (this.checked) {
