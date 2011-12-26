@@ -1,17 +1,7 @@
-"""
-#1. Download new repo
-#2. Unzip it
-#3. Link new repo
-#4. Create media_files symlink
-#5. Create admin symlink
-6. Change DEBUG to False
-#7. Copy live_settings.py to new repo's directory
-8. Reload apache
-"""
-
 from datetime import datetime
 from fabric.api import run, warn
 from fabric.contrib.files import sed
+
 
 def download():
     run('cd www && wget https://github.com/owad/service/tarball/master')
