@@ -1,8 +1,10 @@
 # -* - coding: utf-8 -*-
+from datetime import datetime, timedelta
+
 from django.db import models
 from django.db.models import Sum, Count
 
-from datetime import datetime, timedelta
+from gadjo.requestprovider.signals import get_request
 
 from person.models import User, Client
 from settings import UPLOAD_URL
@@ -171,16 +173,17 @@ class Product(models.Model):
         return counts
 
     def get_alert(self):
-        color = '';
-        if datetime.now() - timedelta(days=3) > self.updated \
-            and self.status in (self.NEW, self.PROCESSING, self.COURIER):
-            color = '#ff0000'
+        if self.updated_by_someone():
+            return '#33ff33'
+        if datetime.now() - timedelta(days=10) > self.updated and self.status == self.EXTERNAL:
+            return '#ff6666'
         if datetime.now() - timedelta(days=7) > self.updated \
             and self.status in (self.READY,):
-            color = '#ff3333'
-        if datetime.now() - timedelta(days=10) > self.updated and self.status == self.EXTERNAL:
-            color = '#ff6666'
-        return color
+            return '#ff3333'
+        if datetime.now() - timedelta(days=3) > self.updated \
+            and self.status in (self.NEW, self.PROCESSING, self.COURIER):
+            return '#ff0000'
+        return ''
 
     def get_signature(self):
         return '/'.join([str(self.id), str(self.created.year)])
@@ -189,9 +192,15 @@ class Product(models.Model):
         try:
             return Comment.objects.filter(product=self,
                                           status=Product.PROCESSING,
-                                          type=Comment.STATUS_CHANGE)[0].user.get_full_name()
+                                          type=Comment.STATUS_CHANGE)[0].user
         except:
-            return '-'
+            return None
+
+    def get_owner_name(self):
+        user = self.get_owner()
+        if user:
+            return user.get_full_name()
+        return '-'
 
     def get_processing_date(self):
         return self.get_by_comment_status(Product.PROCESSING)
@@ -225,6 +234,25 @@ class Product(models.Model):
             return getattr(Comment.objects.get(product=self, status=status_value, type=Comment.STATUS_CHANGE), field)
         except:
             return '-'
+
+    def get_last_update_user(self):
+        try:
+            return Product.objects.get(pk=self.id).comment_set.order_by('-created')[0].user
+        except:
+            return None
+
+    def updated_by_someone(self):
+        if self.status != Product.PROCESSING:
+            return False
+
+        last_user = self.get_last_update_user()
+        owner = self.get_owner()
+        current_user = get_request().user
+        if owner and last_user and current_user:
+            if last_user.id != owner.id:
+                if current_user.id == owner.id:
+                    return True
+        return False
 
     def __unicode__(self):
         return self.name

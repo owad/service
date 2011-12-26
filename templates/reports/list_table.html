@@ -23,7 +23,7 @@
         <td class="center">{{ product.get_processing_date.date }}<br/>{{ product.get_processing_user }}</td>
         <td class="center">{{ product.get_ready_date.date }}<br/>{{ product.get_ready_user }}</td>
         <td class="center">{{ product.get_out_date.date }}<br/>{{ product.get_out_user }}</td>
-        <td class="center">{{ product.get_owner }}</td>
+        <td class="center">{{ product.get_owner_name }}</td>
     </tr>
     {% empty %}
     <tr>

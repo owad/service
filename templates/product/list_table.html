@@ -27,7 +27,7 @@
         <td class="center">{{ product.get_status_name }}</td>
         <td>{{ product.client.phone_number|default:"-" }}</td>
         <td class="center">{{ product.created }}</td>
-        <td class="center">{{ product.get_owner }}</td>
+        <td class="center">{{ product.get_owner_name }}</td>
     </tr>
     {% empty %}
     <tr>

@@ -24,7 +24,7 @@
                 {% if user.is_authenticated %}
                 <div class="account-info">
                     <div>
-                        <span>zalogowany jako <span class="full_name">{{ user.get_full_name }}</span></span>
+                        <span>zalogowany jako <span class="full_name">{{ user.get_full_name }}</span> (ostatnie logowanie: {{ user.last_login }})</span>
                         {% if user.is_staff %}
                         <a href="{% url reports %}">RAPORTY</a>
                         {% endif %}
