@@ -32,7 +32,8 @@ class Client(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='data utworzenia')
 
     class Meta:
-        verbose_name_plural = "klient"
+        verbose_name = "klient"
+        verbose_name_plural = "klienci"
     
     def __unicode__(self):
         if self.company_name: return self.company_name

@@ -271,7 +271,7 @@ class Comment(models.Model):
 
     note = models.TextField(verbose_name='notatka')
     type = models.CharField(choices=TYPES, max_length=32, verbose_name='typ')
-    status = models.CharField(blank=True, max_length=32)
+    status = models.CharField(choices=Product.STATUS_CHOICES, blank=True, max_length=32)
     hardware = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt sprzętu')
     software = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt usługi')
     transport = models.DecimalField(max_digits=10, decimal_places=2, default=DECIMAL_ZERO, verbose_name='koszt dojazdu')
@@ -281,7 +281,8 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, verbose_name='produkt')
 
     class Meta:
-        verbose_name_plural = "komentarz"
+        verbose_name_plural = "komentarze"
+        verbose_name = "komentarz"
         ordering = ['-created']
 
     def save(self, *args, **kwargs):
