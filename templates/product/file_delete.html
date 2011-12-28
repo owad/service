@@ -2,6 +2,9 @@
 <p>Czy jesteś pewny, że chcesz usunąć plik "{{ object }}"?
 <form action="{% url product-delete-file object.product.id object.id %}" method="post">
     {% csrf_token %}
-    <input type="submit" value="tak" />
-    <input type="button" value="nie" onclick="$.fancybox.close();" />
+    <input class="button" type="submit" value="tak" />
+    <input class="button" type="button" value="nie" onclick="$.fancybox.close();" />
 </form>
+<script type="text/javascript">
+$(".button").button();
+</script>

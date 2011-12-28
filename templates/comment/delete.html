@@ -2,6 +2,9 @@
 <p>Czy jesteś pewny, że chcesz usunąć komentarz "{{ object }}"?
 <form action="{% url comment-del object.id %}" method="post">
     {% csrf_token %}
-    <input type="submit" value="tak" />
-    <input type="button" value="nie" onclick="$.fancybox.close();" />
+    <input class="button" type="submit" value="tak" />
+    <input class="button" type="button" value="nie" onclick="$.fancybox.close();" />
 </form>
+<script type="text/javascript">
+$(".button").button();
+</script>
