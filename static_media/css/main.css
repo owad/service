@@ -43,7 +43,6 @@ table.client-list tr:hover > td, table.product-list tr:hover > td { color: #fff;
 table.client-list th, table.product-list th, table.comment-list {  }
 div.account-info { 
     float: right; 
-    width: 50%; 
     text-align: right;
     margin: 5px 0px; 
 }
@@ -52,7 +51,6 @@ div.account-info span {
 }
 div.top-menu { 
     margin: 5px 0px;
-    width: 50%; 
     float: left;
 }
 div.top-menu a { 
