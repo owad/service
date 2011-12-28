@@ -179,7 +179,7 @@ class CommentDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url(id))
     
     def get_template_names(self):
-        return [self.template_view]
+        return [self.template_name]
     
     def get_success_url(self, id):
         return reverse(self.success_url, kwargs={'pk': id})

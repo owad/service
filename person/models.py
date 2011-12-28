@@ -34,6 +34,7 @@ class Client(models.Model):
     class Meta:
         verbose_name = "klient"
         verbose_name_plural = "klienci"
+        ordering = ['-created']
     
     def __unicode__(self):
         if self.company_name: return self.company_name

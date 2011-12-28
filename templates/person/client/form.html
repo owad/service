@@ -1,9 +1,7 @@
-{% extends 'main.html' %}
-
 {% block content %}
 <h2>{% if object %}Edycja danych klienta {{ object }}{% else %}Nowy klient{% endif %}</h2>
 <div class="client-add">
-	<form action="" method="post">
+	<form id="client-create-form" action="" method="post" onsubmit="return false;">
 	    {% csrf_token %}
 	    <table>
 	        {{ form.as_table }}
@@ -15,3 +13,23 @@
 	</form>
 </div>
 {% endblock %}
+
+<script type="text/javascript">
+$("#client-create-form").bind('submit', function() {
+    $.fancybox.showActivity();
+    $.ajax({
+        type: "POST",
+        cache: false,
+        url: "{% if object %}{% url client-edit object.id %}{% else %}{% url client-add %}{% endif %}",
+        data: $(this).serializeArray(),
+        success: function(data) {
+            json = $.parseJSON(data)
+            if (json.success) {
+                document.location.href = json.data;
+            } else {
+                $.fancybox(json.data);
+            }
+        }
+    });
+});
+</script>

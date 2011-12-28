@@ -15,19 +15,19 @@ MANAGERS = ADMINS
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'company',                   # Or path to database file if using sqlite3.
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'company',
             'USER': 'root',
             'PASSWORD': 'root'
         }
     }
-    
+
     STATIC_URL = '/static_media/'
     SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
     UPLOAD_URL = 'media_files/'
 else:
     from live_settings import *
-    
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -156,3 +156,4 @@ SESSION_SAVE_EVERY_REQUEST = True
 LOGIN_URL = '/zaloguj/'
 
 PRODUCTS_PER_PAGE = 20
+CLIENTS_PER_PAGE = 20

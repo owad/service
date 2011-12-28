@@ -9,17 +9,20 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
 from django.utils.encoding import smart_str
+from django.template import loader, RequestContext
 
 from person.models import Client
 from person.forms import ClientForm
 from product.views import ProductListView
+
+from settings import CLIENTS_PER_PAGE
 
 
 class ClientListView(ListView):
     context_object_name = "client_list"
     queryset = None
     template_name = "person/client/list.html"
-    paginate_by = 50
+    paginate_by = CLIENTS_PER_PAGE
     
     def get_queryset(self):
         q = self.get_search_query()
@@ -48,6 +51,19 @@ class ClientAddView(CreateView):
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'pk': self.object.id})
 
+    def form_invalid(self, form):
+        html = loader.render_to_string(self.template_name, 
+                                       dictionary=self.get_context_data(form=form), 
+                                       context_instance=RequestContext(self.request))
+        json = simplejson.dumps({'success': False, 'data': html})
+        return HttpResponse(json)
+
+    def form_valid(self, form):
+        new_client = form.save()
+        success_url = reverse('client-details', kwargs={'pk': new_client.id})
+        json = simplejson.dumps({'success': True, 'data': success_url})
+        return HttpResponse(json)
+
 
 class ClientEditView(UpdateView):
     template_name = "person/client/form.html"
@@ -57,6 +73,17 @@ class ClientEditView(UpdateView):
     def get_success_url(self):
         return reverse('client-details', kwargs={'pk': self.get_object().id})
 
+    def form_invalid(self, form):
+        html = loader.render_to_string(self.template_name, 
+                                       dictionary=self.get_context_data(form=form), 
+                                       context_instance=RequestContext(self.request))
+        json = simplejson.dumps({'success': False, 'data': html})
+        return HttpResponse(json)
+
+    def form_valid(self, form):
+        super(ClientEditView, self).form_valid(form)
+        json = simplejson.dumps({'success': True, 'data': self.get_success_url()})
+        return HttpResponse(json)
 
 class ClientDetailView(ProductListView):
     template_name = "person/client/details.html"
