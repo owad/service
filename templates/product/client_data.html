@@ -1,0 +1,15 @@
+<h3>Dane klienta</h3>
+<div>{{ product.client.first_name }} {{ product.client.last_name }}</div>
+<div>{{ product.client.company_name }}</div>
+{% for line in product.client.get_address_lines %}
+<div>{{ line }}</div>
+{% endfor %}
+<div>{{ product.client.email }}</div>
+<div>{{ product.client.get_phone_numbers }}</div>
+<div class="product-add-link">
+    <a id="client-edit" class="button" href="{% url client-edit product.client.id %}">edycja danych</a>
+    <a class="button" href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
+</div>
+<script type="text/javascript">
+$("#client-edit").fancybox();
+</script>

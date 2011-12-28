@@ -29,9 +29,6 @@ div.logout-view {
     margin: 0px auto;
     background-color: #eee; 
 }
-div.logout-view a {
-    color: #1a1; 
-}
 
 div.login-form th { text-align: right; padding-right: 5px; }
 
@@ -53,27 +50,11 @@ div.top-menu {
     margin: 5px 0px;
     float: left;
 }
-div.top-menu a { 
-    margin: 0px 5px 0px 0px;
-    background-color: #999;
-    padding: 5px;
-}
+
 div.return-link, div.product-add-link { 
     margin: 10px 0px;
     width: 50%; 
     float: left;
-}
-div.return-link a, div.product-add-link a { 
-    background-color: #999;
-    padding: 5px;
-}
-
-div.product-add-link a {
-	display: block;
-	height: 20px;
-	width: 120px;
-	text-align: center;
-	margin: 5px;
 }
 
 .full_name {
@@ -82,21 +63,6 @@ div.product-add-link a {
 	font-weight: bold;
 }
 
-div.return-link a:hover, div.product-add-link a:hover {
-    background-color: #999;
-    text-decoration: none;
-    color: #000;
-}
-div.account-info a { 
-    margin: 0px;
-    background-color: #999;
-    padding: 5px;
-}
-div.top-menu a:hover, div.account-info a:hover {
-    background-color: #999;
-    text-decoration: none;
-    color: #000;
-}
 div.client-details {
     font-size: 15px; 
     margin: 5px 0px;

@@ -25,18 +25,7 @@
 	        </table>
 	    </div>
 	    <div class="client-data">
-	        <h3>Dane klienta</h3>
-	            <div>{{ product.client.first_name }} {{ product.client.last_name }}</div>
-	            <div>{{ product.client.company_name }}</div>
-	            {% for line in product.client.get_address_lines %}
-	            <div>{{ line }}</div>
-	            {% endfor %}
-	            <div>{{ product.client.email }}</div>
-	            <div>{{ product.client.get_phone_numbers }}</div>
-	            <div class="product-add-link">
-	                <a href="{% url client-edit product.client.id %}">edycja danych</a>
-	                <a href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
-	            </div>
+            {% include "product/client_data.html" with product=product %}
 	    </div>
 	    <div class="product-files">
 	       {% include "product/file_list.html" with product=product %}
@@ -46,9 +35,9 @@
 	    <h2>Historia</h2>
 	    <div class="return-link">
 	        {% if product.status != product.CLOSED %}
-	        <a id="ajax-comment-add-top" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+	        <a class="button" id="ajax-comment-add-top" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
 	        {% endif %}
-	        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+	        <a class="button" href="{% url product-print product.id %}" target="_blank">drukuj</a>
 	    </div>
 	    <table class="comment-list">
 	        <tr>
@@ -91,9 +80,9 @@
 	    
 	    <div class="return-link">
 	        {% if product.status != product.CLOSED %}
-	        <a id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
+	        <a class="button" id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
 	        {% endif %}
-	        <a href="{% url product-print product.id %}" target="_blank">drukuj</a>
+	        <a class="button" href="{% url product-print product.id %}" target="_blank">drukuj</a>
 	    </div>
 	    <div class="clearBoth"></div>
 	</div>

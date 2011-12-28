@@ -26,19 +26,19 @@
                     <div>
                         <span>zalogowany jako <span class="full_name">{{ user.get_full_name }}</span> (ostatnie logowanie: {{ user.last_login }})</span>
                         {% if user.is_staff %}
-                        <a href="{% url reports %}">RAPORTY</a>
+                        <a class="button" href="{% url reports %}">RAPORTY</a>
                         {% endif %}
                         {% if user.is_superuser %}
-                        <a target="_blank" href="/admin/">ADMIN</a>
+                        <a class="button" target="_blank" href="/admin/">ADMIN</a>
                         {% endif %}
-                        <a href="{% url logout %}">WYLOGUJ</a>
+                        <a class="button" href="{% url logout %}">WYLOGUJ</a>
                     </div>
                 </div>
                 {% endif %}
                 <div class="top-menu">
-                    <a href="{% url product-list %}">ZGŁOSZENIA</a>
-                    <a href="{% url client-list %}">KLIENCI</a>
-                    <a id="client-create" href="{% url client-add %}">NOWY KLIENT</a>
+                    <a class="button" href="{% url product-list %}">ZGŁOSZENIA</a>
+                    <a class="button" href="{% url client-list %}">KLIENCI</a>
+                    <a class="button" id="client-create" href="{% url client-add %}">NOWY KLIENT</a>
                 </div>
             </div>
             {%  endblock %}
@@ -103,6 +103,7 @@
                 $("#ajax-comment-add-bottom").fancybox();
                 $(".datepicker").datepicker({ dateFormat: 'dd.mm.yy' });
                 $("#client-create").fancybox();
+                $(".button, input:submit").button();
             });
         </script>
         <!-- END -->

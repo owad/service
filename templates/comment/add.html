@@ -5,8 +5,7 @@
     <table>
         {{ form.as_table }}
         <tr>
-            <td></td>
-            <td>
+            <td colspan="2" style="width: 450px;">
                 {% if product.status != product.COURIER %}
                     <input type="submit" value="skomentuj{% if user.is_staff %}/dodaj sprzęt{% endif %}" onclick="$('#status_change').val(0); "/>
                 {% endif %}
@@ -33,9 +32,10 @@ $("#comment-form").bind('submit', function() {
             if (json.success) {
                 document.location.reload();
             } else {
-                $.fancybox(json.data);
+                $.fancybox(json.data, {'width': 600});
             }
         }
     });
 });
+$('input:submit').button();
 </script>

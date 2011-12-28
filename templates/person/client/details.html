@@ -12,13 +12,13 @@
     <div>{{ client.email }}</div>
     
     <div class="product-add-link">
-        <a href="{% url product-add client.id %}">nowe&nbsp;zgłoszenie</a>
-        <a id="client-edit" href="{% url client-edit client.id %}">edycja&nbsp;danych</a>
+        <a class="button" href="{% url product-add client.id %}">nowe&nbsp;zgłoszenie</a>
+        <a class="button" id="client-edit" href="{% url client-edit client.id %}">edycja&nbsp;danych</a>
     </div>
 </div>
 {{ block.super }}
 <div class="return-link">
-    <a href="{% url client-list %}">powrót</a>
+    <a class="button" href="{% url client-list %}">powrót</a>
 </div>
 <div class="clearBoth"></div> 
 
