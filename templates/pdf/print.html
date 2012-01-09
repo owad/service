@@ -61,6 +61,10 @@
                         <td>{{ product.description|default:"nie podano" }}</td>
                     </tr>
                     <tr>
+                        <td style="text-align: right; vertical-align: top; margin-right: 10px;">informacje dodatkowe:</td>
+                        <td>{{ product.additional_info|default:"nie podano" }}</td>
+                    </tr>
+                    <tr>
                         <td style="text-align: right; vertical-align: top; margin-right: 10px;">naprawa gwarancyjna:</td>
                         <td>{{ product.get_warranty_name|lower }}</td>
                     </tr>
