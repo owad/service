@@ -3,7 +3,7 @@
 {% block title %} {{ block.super }} - {{ product }} {% endblock %}
 {% block content %} 
 	{% block content-header %}
-	    <h2 class="{% if product.client.is_subscriber %}subscriber-color{% endif %}">Zgłoszenia {{ product.get_signature }} ({{ product.get_owner_name }})</h2>
+	    <h2 class="{% if product.client.is_subscriber %}subscriber-color{% endif %}">Zgłoszenie {{ product.get_signature }} ({{ product.get_owner_name }})</h2>
 	{% endblock %}
 	<div class="product-details">
 	    <div class="product-data">
