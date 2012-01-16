@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
     <title>Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</title>
     <style type="text/css">
-    @font-face { font-family: "DejaVuSans"; src: url("http://www.toolpart.hu/static/media/medialibrary/2010/04/DejaVuSans.ttf"); font-size: 14px; }
+    @font-face { font-family: "DejaVuSans"; src: url("{{ STATIC_URL }}fonts/dejavusans.ttf"); font-size: 14px; }
     html { font-family: "DejaVuSans"; }
     td { padding-top: 5px; }
     </style>
