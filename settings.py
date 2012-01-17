@@ -26,8 +26,10 @@ if DEBUG:
     SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
     UPLOAD_URL = 'media_files/'
 else:
-    from live_settings import *
-
+    try:
+        from live_settings import *
+    except:
+        pass
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
