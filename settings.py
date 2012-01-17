@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'product',
     'report',
     'pdf',
+    'django_cron',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -159,3 +160,7 @@ LOGIN_URL = '/zaloguj/'
 
 PRODUCTS_PER_PAGE = 20
 CLIENTS_PER_PAGE = 20
+
+CRON_CLASSES = [
+    "django_cron.tasks.DatabaseBackup",
+]
