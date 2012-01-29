@@ -12,6 +12,6 @@ class DatabaseBackup(CronJobBase):
 
     def do(self):
         file_path = Command().handle()
-        mail = EmailMessage('Backup bazy iserwis.lechkom.pl z dnia %s' % datetime.now().strftime('%d-%m-%Y'), '', 'admin@iserwis.lechkom.pl', ['paboowicz@gmail.com', 'llechowicz@gmail.com'])
+        mail = EmailMessage('Backup bazy iserwis.lechkom.pl z dnia %s' % datetime.now().strftime('%d-%m-%Y'), '', 'admin@iserwis.lechkom.pl', ['paboowicz@gmail.com'])
         mail.attach_file(file_path)
         mail.send()
