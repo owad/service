@@ -22,6 +22,7 @@
 	            <tr><th>Kurier</th><td>{{ courier }}</td></tr>
 	            <tr><th>Numer przesyłki: </th><td>{{ product.parcel_number }}</td></tr>
 	            {% endif %}
+                    <tr><th>Dodane przez: </th><td> {{ product.user }}</td></tr>
 	        </table>
 	    </div>
 	    <div class="client-data">
