@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% load service_extras %}
 {% block title %} {{ block.super }} - {{ product }} {% endblock %}
-{% block content %} 
+{% block content %}
 	{% block content-header %}
 	    <h2 class="{% if product.client.is_subscriber %}subscriber-color{% endif %}">Zgłoszenie {{ product.get_signature }} ({{ product.get_owner_name }})</h2>
 	{% endblock %}
@@ -64,7 +64,7 @@
 		                <a id="delete-comment{{ comment.id }}" href="{% url comment-del comment.id %}">usuń</a>
 		                <script type="text/javascript">
 		                    $("#delete-comment" + {{ comment.id }}).fancybox();
-		                </script> 
+		                </script>
 		                {% else %}
 		                -
 		                {% endif %}
@@ -76,9 +76,19 @@
 	            <td colspan="5">brak komentarzy</td>
 	        </tr>
 	    {% endfor %}
+	    	<tr style="background-color:#eee;">
+	    		<td> - </td>
+	            <td class="center">-</td>
+	            <td class="center">-</td>
+	            <td class="center">-</td>
+	            <td class="center">{{ product.NEW }}</td>
+	            <td class="center">{{ product.created }} przez {{ product.user }}</td>
+	            <td class="center">
+	            </td>
+	    	</tr>
 	    </table>
 	    {% endif %}
-	    
+
 	    <div class="return-link">
 	        {% if product.status != product.CLOSED %}
 	        <a class="button" id="ajax-comment-add-bottom" href="{% url comment-add product.id %}">komentarz/zmiana statusu</a>
