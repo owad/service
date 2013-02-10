@@ -3,7 +3,7 @@
     {% block content-header %}
     <h2>Klienci</h2>
     {% endblock %}
-    <table class="client-list">
+    <table class="user-list">
         <tr>
            <th class="left">ID</th>
            <th class="left">Imię</th>
@@ -12,14 +12,14 @@
            <th class="left">Miejscowość</th>
            <th class="left">Telefon</th>
         </tr>
-        {% for client in client_list %}
-        <tr class="{% if client.is_subscriber %}subscriber{% endif %} {% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url client-details client.id %}'">
-            <td>{{ client.id }}</td>
-            <td>{{ client.first_name }}</td>
-            <td>{{ client.last_name }}</td>
-            <td>{{ client.company_name|default:"-" }}</td>
-            <td>{{ client.city|default:"-" }}</td>
-            <td>{{ client.phone_number|default:"-" }}</td>
+        {% for user in user_list %}
+        <tr class="{% if user.is_subscriber %}subscriber{% endif %} {% cycle 'row1' 'row2' %}" onclick="window.location.href='{% url user-details user.id %}'">
+            <td>{{ user.id }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.company_name|default:"-" }}</td>
+            <td>{{ user.city|default:"-" }}</td>
+            <td>{{ user.phone_number|default:"-" }}</td>
         </tr>
         {% empty %}
         <tr>

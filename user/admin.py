@@ -1,12 +1,9 @@
 from django.contrib import admin
+from user.models import User
 
-from person.models import Client
 
-#class UserAdmin(admin.ModelAdmin):
-#    model = User
-
-class ClientAdmin(admin.ModelAdmin):
-    model = Client
+class UserAdmin(admin.ModelAdmin):
+    model = User
     list_display = ('id', 'first_name', 'last_name', 'company_name', 'city', 'email', 'phone_number')
     search_fields = ('first_name', 'last_name', 'company_name', 'city', 'email', 'phone_number')
     list_filter = ('company_name', 'city', 'postcode')
@@ -15,4 +12,5 @@ class ClientAdmin(admin.ModelAdmin):
     
     actions_on_bottom = True
 
-admin.site.register(Client, ClientAdmin)
+admin.site.register(User, UserAdmin)
+

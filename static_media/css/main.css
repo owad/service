@@ -36,8 +36,8 @@ table.report { width: 610px; }
 table.report th { text-align: right; padding-right: 5px; width: 150px; }
 table.report ul { list-style: none; padding-left: 0px; }
 table.report li { }
-table.client-list tr:hover > td, table.product-list tr:hover > td { color: #fff; background-color: #aaa; cursor: pointer;}
-table.client-list th, table.product-list th, table.comment-list {  }
+table.user-list tr:hover > td, table.product-list tr:hover > td { color: #fff; background-color: #aaa; cursor: pointer;}
+table.user-list th, table.product-list th, table.comment-list {  }
 div.account-info { 
     float: right; 
     text-align: right;
@@ -63,27 +63,28 @@ div.return-link, div.product-add-link {
 	font-weight: bold;
 }
 
-div.client-details {
+div.user-details {
     font-size: 15px; 
     margin: 5px 0px;
 }
 div.comment-add form table { width: 700px; }
 div.comment-add th { text-align: right; padding-right: 5px; width: 120px; vertical-align: top; padding-top: 5px; } 
 div.product-add { width: 580px; }
-div.client-add { width: 610px; }
+div.user-add { width: 610px; }
 div.product-add input { width: 150px; }
 div.product-add th { text-align: right; padding-right: 5px; width: 200px; }
 div.pagination { clear: both; text-align: center; }
 
 div.product-data { width: 40%; float: left; }
-div.client-data { width: 30%; float: left; }
+div.user-data { width: 30%; float: left; }
 div.product-files { width: 30%; float: left; }
 
-div.client-add th, div.product-data th { width: 150px; text-align: right; padding-right: 5px; }
+div.user-add th, div.product-data th { width: 150px; text-align: right; padding-right: 5px; }
 div.footer { display: block; padding: 0px 5px; text-align: right; clear: both; }
 
 div.search-forms { display: block; clear: both; padding: 10px 10px; background-color: #ddd; }
-div.client-search, div.product-search { float: left; margin-right: 100px; }
+div.user-search, div.product-search { float: left; margin-right: 100px; }
+
 
 span.product-types { font-size: 13px; font-weight: normal; }
 

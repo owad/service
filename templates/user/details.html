@@ -2,7 +2,7 @@
 {% block title %} {{ block.super }} - {{ client }} {% endblock %}
 {% block content %}
 <h2>Dane klienta {{ client }}</h2>
-<div class="client-details">
+<div class="user-details">
     <div>{{ client.first_name }} {{ client.last_name }}</div>
     <div>{{ client.company_name }}</div>
     {% for line in client.get_address_lines %}
@@ -13,16 +13,13 @@
     
     <div class="product-add-link">
         <a class="button" href="{% url product-add client.id %}">nowe&nbsp;zgłoszenie</a>
-        <a class="button" id="client-edit" href="{% url client-edit client.id %}">edycja&nbsp;danych</a>
+        <a class="button" id="user-edit" href="{% url user-edit client.id %}">edycja&nbsp;danych</a>
     </div>
 </div>
 {{ block.super }}
 <div class="return-link">
-    <a class="button" href="{% url client-list %}">powrót</a>
+    <a class="button" href="{% url user-list %}">powrót</a>
 </div>
 <div class="clearBoth"></div> 
 
-<script type="text/javascript">
-$("#client-edit").fancybox();
-</script>
 {% endblock %}

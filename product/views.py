@@ -13,7 +13,7 @@ from django.db.models import Q
 
 from product.models import Product, Comment, Courier, File
 from product.forms import ProductForm, CommentForm, StaffCommentForm, CourierCommentForm, FileForm
-from person.models import Client
+from user.models import User
 
 from settings import PRODUCTS_PER_PAGE
 
@@ -97,13 +97,13 @@ class ProductAddView(CreateView):
     
     def get_context_data(self, **kwargs):
         context_data = CreateView.get_context_data(self, **kwargs)
-        context_data['client'] = get_object_or_404(Client, pk=self.kwargs['pk'])
+        context_data['client'] = get_object_or_404(User, pk=self.kwargs['pk'])
         return context_data
     
     def get_form_kwargs(self):
         kwargs = CreateView.get_form_kwargs(self)
         kwargs['initial']['user'] = self.request.user
-        kwargs['initial']['client'] = get_object_or_404(Client, pk=self.kwargs['pk'])
+        kwargs['initial']['client'] = get_object_or_404(User, pk=self.kwargs['pk'])
         return kwargs
     
     def get_success_url(self):

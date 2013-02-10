@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from time import time
 
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
@@ -11,29 +12,29 @@ from django.utils import simplejson
 from django.utils.encoding import smart_str
 from django.template import loader, RequestContext
 
-from person.models import Client
-from person.forms import ClientForm
+from user.models import User
+from user.forms import UserForm
 from product.views import ProductListView
 
-from settings import CLIENTS_PER_PAGE
+from settings import USERS_PER_PAGE
 
 
-class ClientListView(ListView):
-    context_object_name = "client_list"
+class UserListView(ListView):
+    context_object_name = "user_list"
     queryset = None
-    template_name = "person/client/list.html"
-    paginate_by = CLIENTS_PER_PAGE
+    template_name = "user/list.html"
+    paginate_by = USERS_PER_PAGE
     
     def get_queryset(self):
         q = self.get_search_query()
         if q:
-            return Client.objects.filter(Q(first_name__icontains=q)|
+            return User.objects.filter(Q(first_name__icontains=q)|
                                          Q(last_name__icontains=q)|
                                          Q(company_name__icontains=q)|
                                          Q(city__icontains=q)|
                                          Q(phone_number__icontains=q))
         else:
-            return Client.objects.all()
+            return User.objects.all()
     
     def get_search_query(self):
         q = None
@@ -42,37 +43,30 @@ class ClientListView(ListView):
         return q
 
 
-class ClientAddView(CreateView):
-    template_name = "person/client/form.html"
-    queryset = Client.objects.all()
-    form_class = ClientForm
-    success_url = 'client-details'
+class UserAddView(CreateView):
+    template_name = "user/form.html"
+    queryset = User.objects.all()
+    form_class = UserForm
+    success_url = 'user-details'
     
     def get_success_url(self):
         return reverse(self.success_url, kwargs={'pk': self.object.id})
 
-    def form_invalid(self, form):
-        html = loader.render_to_string(self.template_name, 
-                                       dictionary=self.get_context_data(form=form), 
-                                       context_instance=RequestContext(self.request))
-        json = simplejson.dumps({'success': False, 'data': html})
-        return HttpResponse(json)
-
-    def form_valid(self, form):
-        new_client = form.save()
-        success_url = reverse('client-details', kwargs={'pk': new_client.id})
-        json = simplejson.dumps({'success': True, 'data': success_url})
-        return HttpResponse(json)
+    def get_initial(self):
+        initial = self.initial.copy()
+        initial['username'] = '%s_%s' % ('user', str(time()).replace('.', ''))
+        return initial
 
 
-class ClientEditView(UpdateView):
-    template_name = "person/client/form.html"
-    form_class = ClientForm
-    queryset = Client.objects.all()
+class UserEditView(UpdateView):
+    template_name = "user/form.html"
+    form_class = UserForm
+    queryset = User.objects.all()
     
     def get_success_url(self):
-        return reverse('client-details', kwargs={'pk': self.get_object().id})
+        return reverse('user-details', kwargs={'pk': self.get_object().id})
 
+    '''
     def form_invalid(self, form):
         html = loader.render_to_string(self.template_name, 
                                        dictionary=self.get_context_data(form=form), 
@@ -81,25 +75,26 @@ class ClientEditView(UpdateView):
         return HttpResponse(json)
 
     def form_valid(self, form):
-        super(ClientEditView, self).form_valid(form)
+        super(UserEditView, self).form_valid(form)
         json = simplejson.dumps({'success': True, 'data': self.get_success_url()})
         return HttpResponse(json)
+    '''
 
-class ClientDetailView(ProductListView):
-    template_name = "person/client/details.html"
+class UserDetailView(ProductListView):
+    template_name = "user/details.html"
     
     def get_queryset(self):
-        client = get_object_or_404(Client, pk=self.kwargs['pk'])
-        return client.product_set.all()
+        user = get_object_or_404(User, pk=self.kwargs['pk'])
+        return user.product_set.all()
     
     def get_context_data(self, **kwargs):
-        context = super(ClientDetailView, self).get_context_data(**kwargs)
-        client = get_object_or_404(Client, pk=self.kwargs['pk'])
-        context['client'] = client
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        user = get_object_or_404(User, pk=self.kwargs['pk'])
+        context['client'] = user
         return context
 
 
-class ClientAjaxSearch(TemplateView):
+class UserAjaxSearch(TemplateView):
     template_name = None
 
     @csrf_exempt
@@ -108,15 +103,15 @@ class ClientAjaxSearch(TemplateView):
 
     def get(self, request, *args, **kwargs):
         q = request.GET.get('term')
-        clients = Client.objects.filter(Q(first_name__icontains=q)|
+        users = User.objects.filter(Q(first_name__icontains=q)|
                                         Q(last_name__icontains=q)|
                                         Q(company_name__icontains=q)|
                                         Q(city__icontains=q)|
                                         Q(phone_number__icontains=q))
         data = []
-        for client in clients:
-            label = str(client)
-            if client.city:
-                label = '%s (%s)' % (str(client), smart_str(client.city).strip())
-            data.append({'id': client.id, 'label': label})
+        for user in users:
+            label = str(user)
+            if user.city:
+                label = '%s (%s)' % (str(user), smart_str(user.city).strip())
+            data.append({'id': user.id, 'label': label})
         return HttpResponse(simplejson.dumps(data))

@@ -1,7 +1,8 @@
+{% extends 'main.html' %}
 {% block content %}
 <h2>{% if object %}Edycja danych klienta {{ object }}{% else %}Nowy klient{% endif %}</h2>
-<div class="client-add">
-	<form id="client-create-form" action="" method="post" onsubmit="return false;">
+<div class="user-add">
+	<form id="user-create-form" action="" method="post" {% comment %}onsubmit="return false;" {% endcomment %}>
 	    {% csrf_token %}
 	    <table>
 	        {{ form.as_table }}
@@ -14,13 +15,14 @@
 </div>
 {% endblock %}
 
+{% comment %}
 <script type="text/javascript">
-$("#client-create-form").bind('submit', function() {
+$("#user-create-form").bind('submit', function() {
     $.fancybox.showActivity();
     $.ajax({
         type: "POST",
         cache: false,
-        url: "{% if object %}{% url client-edit object.id %}{% else %}{% url client-add %}{% endif %}",
+        url: "{% if object %}{% url user-edit object.id %}{% else %}{% url user-add %}{% endif %}",
         data: $(this).serializeArray(),
         success: function(data) {
             json = $.parseJSON(data)
@@ -34,3 +36,5 @@ $("#client-create-form").bind('submit', function() {
 });
 $(".button, input:submit").button();
 </script>
+{% endcomment %}
+

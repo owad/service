@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'company',
             'USER': 'root',
             'PASSWORD': 'root'
@@ -123,7 +123,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'account',
-    'person',
+    'user',
     'product',
     'report',
     'pdf',
@@ -159,7 +159,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 LOGIN_URL = '/zaloguj/'
 
 PRODUCTS_PER_PAGE = 20
-CLIENTS_PER_PAGE = 20
+USERS_PER_PAGE = 20
 
 CRON_CLASSES = [
     "django_cron.tasks.DatabaseBackup",

@@ -4,9 +4,9 @@ from product.models import Product, Comment, Courier
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
-    list_display = ('id', 'name', 'producent', 'user', 'client', 'status', 'created', 'updated')
+    list_display = ('id', 'name', 'producent', 'client', 'status', 'created', 'updated')
     search_fields = ('id', 'name', 'producent', 'serial', 'status')
-    list_filter = ('user',)
+    list_filter = ('client',)
     ordering = ('-created', )
     date_hierarchy = 'created'
     list_display_links = ('id', 'name')
@@ -31,3 +31,4 @@ class CourierAdmin(admin.ModelAdmin):
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Courier, CourierAdmin)
+

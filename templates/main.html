@@ -8,12 +8,6 @@
         <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" type="image/x-icon" />
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-        <!-- Fancybox -->
-       	<script type="text/javascript" src="{{ STATIC_URL }}fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-        <link href="{{ STATIC_URL }}fancybox/style.css" rel="stylesheet" type="text/css" media="screen" />
-        <!-- End -->
         <link href="{{ STATIC_URL }}css/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" media="screen" />
     </head>
     <body>
@@ -27,7 +21,9 @@
                 {% if user.is_authenticated %}
                 <div class="account-info">
                     <div>
-                        <span>zalogowany jako <span class="full_name">{{ user.get_full_name }}</span> (ostatnie logowanie: {{ user.last_login }})</span>
+                        {% if user.get_full_name %}
+                        <span>zalogowany jako <span class="full_name"> {{ user.get_full_name }}</span> (ostatnie logowanie: {{ user.last_login }})</span>
+                        {% endif %}
                         {% if user.is_staff %}
                         <a class="button" href="{% url reports %}">RAPORTY</a>
                         {% endif %}
@@ -40,8 +36,8 @@
                 {% endif %}
                 <div class="top-menu">
                     <a class="button" href="{% url product-list %}">ZGŁOSZENIA</a>
-                    <a class="button" href="{% url client-list %}">KLIENCI</a>
-                    <a class="button" id="client-create" href="{% url client-add %}">NOWY KLIENT</a>
+                    <a class="button" href="{% url user-list %}">KLIENCI</a>
+                    <a class="button" id="user-create" href="{% url user-add %}">NOWY KLIENT</a>
                 </div>
             </div>
             {%  endblock %}
@@ -54,8 +50,8 @@
                         <input type="submit" value="szukaj" />
                     </form>
                 </div>
-                <div class="client-search">
-                    <form action="{% url client-list %}" method="GET">
+                <div class="user-search">
+                    <form action="{% url user-list %}" method="GET">
                         <label>szukaj klienta:</label>
                         <input type="text" name="q" value="" />
                         <input type="submit" value="szukaj" />
@@ -102,10 +98,7 @@
         <!-- JAVASCRIPT -->
         <script type="text/javascript">
             $(document).ready(function() {
-                $("#ajax-comment-add-top").fancybox();
-                $("#ajax-comment-add-bottom").fancybox();
                 $(".datepicker").datepicker({ dateFormat: 'dd.mm.yy' });
-                $("#client-create").fancybox();
                 $(".button, input:submit").button();
             });
         </script>

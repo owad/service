@@ -7,7 +7,7 @@
 <div>{{ product.client.email }}</div>
 <div>{{ product.client.get_phone_numbers }}</div>
 <div class="product-add-link">
-    <a id="client-edit" class="button" href="{% url client-edit product.client.id %}">edycja danych</a>
+    <a id="client-edit" class="button" href="{% url user-edit product.client.id %}">edycja danych</a>
     <a class="button" href="{% url client-details product.client.id %}">Lista zgłoszeń</a>
 </div>
 <script type="text/javascript">

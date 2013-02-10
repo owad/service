@@ -6,7 +6,7 @@ from django.db.models import Sum, Count
 
 from gadjo.requestprovider.signals import get_request
 
-from person.models import User, Client
+from user.models import User, User
 from settings import UPLOAD_URL
 
 from managers import OutdatedManager
@@ -69,9 +69,8 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='data zgłoszenia')
     updated = models.DateTimeField(auto_now=True, verbose_name='ostatnia akutalizajca')
 
-    user = models.ForeignKey(User, verbose_name='pracownik')
     fixed_by = models.IntegerField(null=True, blank=True, verbose_name='wykonane przez')
-    client = models.ForeignKey(Client, verbose_name='klient')
+    client = models.ForeignKey(User, verbose_name='klient')
 
     objects = OutdatedManager()
 
@@ -80,7 +79,20 @@ class Product(models.Model):
         verbose_name = "zgłoszenie"
         ordering = ['-created']
 
+
     def get_next_status(self):
+        if self.client.role == User.CLIENT:
+            return get_next_status_for_normal_user()
+        else:
+            pass
+
+    def set_next_status(self):
+        if self.client.role == User.CLIENT:
+            return set_next_status_for_normal_user()
+        else:
+            pass
+
+    def get_next_status_for_normal_user(self):
         break_on_next = False
         next_status = self.FIRST_STATUS
         if self.status == self.LAST_STATUS: return self.LAST_STATUS
@@ -93,7 +105,7 @@ class Product(models.Model):
                 if key == self.status: break_on_next = True
             return next_status
 
-    def set_next_status(self, request):
+    def set_next_status_for_normal_user(self, request):
         old_status = self.status 
         POST = request.POST
         if 'status_change' in POST and int(POST['status_change']) == 1 and self.status == self.PROCESSING:
@@ -333,3 +345,4 @@ class File(models.Model):
             return self.title
         else:
             return self.get_file_name()
+

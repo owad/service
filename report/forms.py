@@ -3,7 +3,7 @@ from django import forms
 from django.forms.widgets import CheckboxSelectMultiple, TextInput, HiddenInput
 import datetime
 
-from person.models import User
+from user.models import User
 from product.models import Product
 
 class ReportForm(forms.Form):
@@ -21,3 +21,4 @@ class ReportForm(forms.Form):
     client = forms.CharField(widget=HiddenInput(), required=False)
     user = forms.MultipleChoiceField(widget=CheckboxSelectMultiple(), choices=userModel.get_user_choices(), label='pracownik')
     all_users = forms.BooleanField(label='wszyscy', required=False)
+
