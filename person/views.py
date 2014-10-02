@@ -36,10 +36,15 @@ class ClientListView(ListView):
             return Client.objects.all()
     
     def get_search_query(self):
-        q = None
+        q = ''
         if 'q' in self.request.GET and self.request.GET['q']:
             q = self.request.GET['q'].strip()
         return q
+
+    def get_context_data(self):
+        context = super(ClientListView, self).get_context_data()
+        context['q'] = self.get_search_query()
+        return context
 
 
 class ClientAddView(CreateView):
