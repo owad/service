@@ -41,8 +41,8 @@ class ClientListView(ListView):
             q = self.request.GET['q'].strip()
         return q
 
-    def get_context_data(self):
-        context = super(ClientListView, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super(ClientListView, self).get_context_data(**kwargs)
         context['q'] = self.get_search_query()
         return context
 
