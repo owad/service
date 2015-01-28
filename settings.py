@@ -1,7 +1,7 @@
 # Django settings for service project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -22,7 +22,7 @@ if DEBUG:
         }
     }
 
-    STATIC_URL = '/static_media/'
+    STATIC_URL = '/static/'
     SECRET_KEY = 'yfbzri)^(ntvirg(n_xsbnwcbw_9g#wu5=ri_nhha0e9*3ndfa'
     UPLOAD_URL = 'media_files/'
 else:
